@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router'
+import { createBrowserRouter, Navigate } from 'react-router'
 import { PublicLayout } from './components/layout/PublicLayout'
 import { AdminLayout } from './components/layout/AdminLayout'
 import { AuthGuard } from './components/layout/AuthGuard'
@@ -6,12 +6,9 @@ import { AuthGuard } from './components/layout/AuthGuard'
 // Public pages (eagerly loaded)
 import HomePage from './pages/public/HomePage'
 import AboutPage from './pages/public/AboutPage'
-import ProgramsPage from './pages/public/ProgramsPage'
 import VssPage from './pages/public/VssPage'
-import NewsPage from './pages/public/NewsPage'
+import WomensTrainingPage from './pages/public/WomensTrainingPage'
 import ArticlePage from './pages/public/ArticlePage'
-import DonatePage from './pages/public/DonatePage'
-import ContactPage from './pages/public/ContactPage'
 import LoginPage from './pages/public/LoginPage'
 
 export const router = createBrowserRouter([
@@ -19,14 +16,16 @@ export const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'about', element: <AboutPage /> },
-      { path: 'programs', element: <ProgramsPage /> },
-      { path: 'vss', element: <VssPage /> },
-      { path: 'news', element: <NewsPage /> },
+      { path: 'our-story', element: <AboutPage /> },
+      { path: 'student-sponsorship', element: <VssPage /> },
+      { path: 'womens-training', element: <WomensTrainingPage /> },
+      { path: 'vss', element: <Navigate to="/student-sponsorship" replace /> },
       { path: 'news/:slug', element: <ArticlePage /> },
-      { path: 'donate', element: <DonatePage /> },
-      { path: 'contact', element: <ContactPage /> },
       { path: 'login', element: <LoginPage /> },
+      {
+        path: 'design-demo',
+        lazy: () => import('./pages/public/DesignDemoPage'),
+      },
     ],
   },
   {
@@ -56,10 +55,6 @@ export const router = createBrowserRouter([
       {
         path: 'sponsorships',
         lazy: () => import('./pages/admin/SponsorshipsPage'),
-      },
-      {
-        path: 'donations',
-        lazy: () => import('./pages/admin/DonationsPage'),
       },
       {
         path: 'articles',

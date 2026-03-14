@@ -35,11 +35,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           required={required}
           className={`
-            w-full px-3 py-2 rounded-lg border bg-white text-text-high
-            placeholder:text-text-muted
-            focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent
+            w-full px-4 py-3 rounded-lg border bg-white text-neutral-700 text-sm
+            placeholder:text-neutral-400
+            focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
             disabled:opacity-50 disabled:cursor-not-allowed
-            ${error ? 'border-danger' : 'border-border'}
+            transition-all duration-200
+            ${error ? 'border-danger/60 ring-2 ring-danger/20' : 'border-neutral-300'}
             ${className}
           `}
           {...props}

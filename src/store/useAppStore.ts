@@ -6,7 +6,9 @@ interface AppState {
   // Auth
   user: User | null
   session: Session | null
+  isAdmin: boolean | null // null = not checked yet
   setAuth: (user: User | null, session: Session | null) => void
+  setIsAdmin: (isAdmin: boolean) => void
   clearAuth: () => void
 
   // UI
@@ -20,8 +22,10 @@ export const useAppStore = create<AppState>()(
       // Auth
       user: null,
       session: null,
+      isAdmin: null,
       setAuth: (user, session) => set({ user, session }),
-      clearAuth: () => set({ user: null, session: null }),
+      setIsAdmin: (isAdmin) => set({ isAdmin }),
+      clearAuth: () => set({ user: null, session: null, isAdmin: null }),
 
       // UI
       sidebarOpen: false,

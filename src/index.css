@@ -1,41 +1,161 @@
 @import "tailwindcss";
 
 /*
-  HIS Design System — Nepal-inspired palette
+  HIS Glassmorphism Design System — Nepal-inspired
 
-  Primary:    Deep Mountain Blue (#1B3A5C) — trust, depth, Himalayan sky
-  Secondary:  Temple Gold (#C4922A) — warmth, Nepal's temples & prayer flags
-  Accent:     Saffron Orange (#E07B2E) — energy, marigolds, cultural vibrancy
-  Success:    Highland Green (#2D6A4F) — growth, terraced hillsides
-  Background: Warm White (#FAF8F5) — natural, paper-like warmth
-  Surface:    Soft Sand (#F0ECE4) — earthy, inviting
-  Text High:  Slate (#1E293B) — readability
-  Text Muted: Stone (#6B7280) — secondary text
-  Danger:     Brick Red (#B91C1C) — alerts
+  Primary:    Crimson Red (#DC143C) — Nepal flag, urgency, action
+  Secondary:  Mountain Bronze (#A67C52) — Himalayan earth, terraced hills
+  Accent:     Warm Sand (#D4C5B0) — earthy neutrals, borders
+  Success:    Highland Green (#2D6A4F) — growth, positive
+  Background: Warm Cream (#F5F1EB) — natural warmth
+  Text:       Warm neutrals (#4A3F36 to #1F1812) — readability
 */
 
 @theme {
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'DM Serif Display', serif;
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
 
-  --color-primary: #1B3A5C;
-  --color-primary-light: #2A5580;
-  --color-secondary: #C4922A;
-  --color-secondary-light: #D4A643;
-  --color-accent: #E07B2E;
-  --color-accent-light: #F09A52;
+  /* Primary — Crimson Red (Nepal flag, urgency) */
+  --color-primary: #DC143C;
+  --color-primary-light: #E85472;
+  --color-primary-dark: #A01028;
+  --color-primary-soft: #FCEEF2;
+
+  /* Secondary — Mountain Bronze (Himalayan earth) */
+  --color-secondary: #A67C52;
+  --color-secondary-light: #C9A77C;
+  --color-secondary-dark: #7D5938;
+  --color-secondary-soft: #F5EFE0;
+
+  /* Accent — Warm Sand (earthy neutrals) */
+  --color-accent: #D4C5B0;
+  --color-accent-dark: #A89680;
+  --color-accent-soft: #F5F1EB;
+
+  /* Semantic Colors */
   --color-success: #2D6A4F;
-  --color-danger: #B91C1C;
-  --color-background: #FAF8F5;
-  --color-surface: #F0ECE4;
-  --color-surface-alt: #E8E3D9;
-  --color-text-high: #1E293B;
-  --color-text-muted: #6B7280;
-  --color-border: #D6D0C4;
+  --color-success-soft: #E8F5EE;
+  --color-warning: #F59E0B;
+  --color-warning-soft: #FEF3C7;
+  --color-danger: #DC2626;
+  --color-danger-soft: #FEE2E2;
+  --color-info: #A67C52;
+  --color-info-soft: #F5EFE0;
+
+  /* Neutrals — Warm Glass Scale */
+  --color-neutral-50: #FDFCFB;
+  --color-neutral-100: #F8F6F4;
+  --color-neutral-200: #F0EBE6;
+  --color-neutral-300: #DCD4CC;
+  --color-neutral-400: #B8AFA3;
+  --color-neutral-500: #8E8177;
+  --color-neutral-600: #6B5D52;
+  --color-neutral-700: #4A3F36;
+  --color-neutral-800: #332B23;
+  --color-neutral-900: #1F1812;
+  --color-neutral-950: #0F0C09;
+
+  /* Legacy Semantic Mappings (for existing components) */
+  --color-background: #F5F1EB;
+  --color-surface: #F8F6F4;
+  --color-surface-alt: #F0EBE6;
+  --color-card: #FFFFFF;
+  --color-border: #DCD4CC;
+  --color-text-high: #332B23;
+  --color-text-muted: #6B5D52;
+  --color-text-disabled: #B8AFA3;
+
+  /* Glassmorphism Variables */
+  --glass-blur: 16px;
+  --glass-blur-heavy: 24px;
+  --glass-blur-subtle: 8px;
+  --glass-opacity: 0.85;
+  --glass-opacity-light: 0.65;
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(31, 24, 18, 0.1);
+  --glass-shadow-heavy: 0 12px 48px rgba(31, 24, 18, 0.15);
 }
 
+/* Base Styles */
 body {
   margin: 0;
   background-color: var(--color-background);
   color: var(--color-text-high);
+  font-family: var(--font-sans);
+}
+
+/* Glassmorphism Utility Classes */
+.glass-surface {
+  background: rgba(255, 255, 255, var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-surface-light {
+  background: rgba(253, 252, 251, var(--glass-opacity-light));
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: var(--glass-shadow-heavy);
+}
+
+.glass-surface-subtle {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(var(--glass-blur-subtle));
+  -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-overlay {
+  background: rgba(31, 24, 18, 0.4);
+  backdrop-filter: blur(var(--glass-blur-subtle));
+  -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
+}
+
+/* Typography Classes */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Leaflet Map Glass Styling */
+.his-cluster {
+  background: rgba(220, 20, 60, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 16px rgba(220, 20, 60, 0.3);
+}
+
+.his-country-label {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(220, 20, 60, 0.2);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-neutral-700);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

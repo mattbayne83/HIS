@@ -11,13 +11,33 @@ interface AuthGuardProps {
 
 export function AuthGuard({ children }: AuthGuardProps) {
   const user = useAppStore((s) => s.user)
+  const setAuth = useAppStore((s) => s.setAuth)
+  const isAdmin = useAppStore((s) => s.isAdmin)
+  const setIsAdmin = useAppStore((s) => s.setIsAdmin)
   const [loading, setLoading] = useState(true)
-  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
+    let cancelled = false
+
     async function checkAdminAccess() {
-      if (!user) {
-        setLoading(false)
+      // Restore session from Supabase if user isn't in store yet
+      let currentUser = user
+      if (!currentUser) {
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session?.user) {
+          setAuth(session.user, session)
+          currentUser = session.user
+        }
+      }
+
+      if (!currentUser) {
+        if (!cancelled) setLoading(false)
+        return
+      }
+
+      // Skip DB query if we already checked admin status this session
+      if (isAdmin !== null) {
+        if (!cancelled) setLoading(false)
         return
       }
 
@@ -25,25 +45,22 @@ export function AuthGuard({ children }: AuthGuardProps) {
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
-          .eq('id', user.id)
+          .eq('id', currentUser.id)
           .single<Profile>()
 
-        if (error) {
-          console.error('Error fetching profile:', error)
-          setIsAdmin(false)
-        } else {
-          setIsAdmin(data?.role === 'admin')
+        if (!cancelled) {
+          setIsAdmin(!error && data?.role === 'admin')
         }
-      } catch (error) {
-        console.error('Profile check error:', error)
-        setIsAdmin(false)
+      } catch {
+        if (!cancelled) setIsAdmin(false)
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
 
     checkAdminAccess()
-  }, [user])
+    return () => { cancelled = true }
+  }, [user, setAuth, isAdmin, setIsAdmin])
 
   if (loading) {
     return (

@@ -1,59 +1,47 @@
-import { useMemo } from 'react'
 import { Link } from 'react-router'
-import { ImageIcon, UserPlus, Heart, GraduationCap } from 'lucide-react'
+import { ImageIcon, UserPlus, Sparkles, Award } from 'lucide-react'
 import PageHero from '../../components/public/PageHero'
-import { Button, MapWidget, LoadingSpinner } from '../../components/ui'
-import { useQuery } from '../../hooks/useQuery'
-import { getStudents } from '../../lib/queries'
-import { studentsToGroupedLocations } from '../../utils/mapHelpers'
+import { Button, MapWidget } from '../../components/ui'
 import { NEPAL_BOUNDARY } from '../../data/nepal-boundary'
+
+const GIVE_URL = 'https://www.his-serve.org/give'
 
 const STEPS = [
   {
     num: 1,
     icon: UserPlus,
-    title: 'Choose to Sponsor',
+    title: 'Apply & Enroll',
     description:
-      'Your $150 per year covers tuition, uniforms, school supplies, and meals for one child in Nepal.',
+      'Young women apply for the residential training program covering sewing, life skills, and vocational development.',
   },
   {
     num: 2,
-    icon: Heart,
-    title: 'Get Connected',
+    icon: Sparkles,
+    title: 'Learn & Grow',
     description:
-      'Receive updates and photos of your sponsored student throughout the year from local coordinators.',
+      'Students receive training in industrial sewing, financial literacy, health education, and personal development.',
   },
   {
     num: 3,
-    icon: GraduationCap,
-    title: 'Watch Them Grow',
+    icon: Award,
+    title: 'Graduate & Thrive',
     description:
-      'Follow your student\'s progress as they build skills, confidence, and a brighter future.',
+      'Graduates receive certification, job placement assistance, and ongoing mentorship to build independent livelihoods.',
   },
 ]
 
 const STATS = [
-  { value: '160+', label: 'Students Currently Sponsored' },
-  { value: '$150', label: 'Per Year, Per Child' },
-  { value: '100%', label: 'Goes to Student Support' },
+  { value: '260+', label: 'RTDC Graduates' },
+  { value: '$1,000', label: 'Per Woman Trained' },
+  { value: '85%', label: 'Employment Rate' },
 ]
 
-export default function VssPage() {
-  const { data: students, loading: studentsLoading } = useQuery(
-    () => getStudents('active'),
-    [],
-  )
-
-  const mapLocations = useMemo(
-    () => (students ? studentsToGroupedLocations(students) : []),
-    [students],
-  )
-
+export default function WomensTrainingPage() {
   return (
     <div>
       <PageHero
-        title="Village Student Sponsorship"
-        subtitle="Giving children access to education for just $150 a year."
+        title="Women's Training"
+        subtitle="Equipping women with the skills and confidence to build independent livelihoods."
       />
 
       {/* Program Overview */}
@@ -61,25 +49,25 @@ export default function VssPage() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="font-display text-3xl text-text-high mb-4">
-              Education Changes Everything
+              A Path to Independence
             </h2>
             <div className="space-y-4 text-text-muted text-base leading-relaxed">
               <p>
-                In remote villages across Nepal, many children lack access to
-                basic education. Without school fees, uniforms, and supplies,
-                they simply can't attend.
+                In many communities across Nepal, young women face limited
+                economic opportunity. Without practical skills or resources,
+                breaking cycles of poverty is nearly impossible.
               </p>
               <p>
-                The Village Student Sponsorship program partners with local
-                Nepali coordinators who identify the students and communities
-                with the greatest need. Your sponsorship covers tuition, school
-                supplies, uniforms, and daily meals — everything a child needs to
-                stay in school.
+                The RTDC Women&apos;s Training program provides a residential
+                learning environment where women gain professional sewing
+                skills, financial literacy, and the confidence to support
+                themselves and their families.
               </p>
               <p>
-                This isn't a top-down program. Local leaders guide every aspect,
-                ensuring partnerships are culturally appropriate and sustainable
-                for the long term.
+                For $1,000, you can sponsor a woman through the entire
+                program — covering training, materials, room and board, and
+                certification. It&apos;s an investment that transforms not just
+                one life, but her family and community.
               </p>
             </div>
           </div>
@@ -134,48 +122,42 @@ export default function VssPage() {
         </div>
       </section>
 
-      {/* Where We Serve */}
+      {/* Where We Train */}
       <section className="bg-surface py-16 md:py-20">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="font-display text-3xl text-text-high text-center mb-3">
-            Where We Serve
+            Where We Train
           </h2>
           <p className="text-text-muted text-center mb-8 max-w-2xl mx-auto text-base leading-relaxed">
-            Each marker represents a village where HIS sponsors students.
-            Toggle between terrain and street view to explore Nepal's landscape.
+            Our training centers partner with communities across Nepal to
+            reach women who need these skills the most.
           </p>
-          {studentsLoading ? (
-            <div className="flex justify-center py-16">
-              <LoadingSpinner />
-            </div>
-          ) : (
-            <MapWidget
-              locations={mapLocations}
-              height="550px"
-              cluster
-              showControls
-              geoJsonOverlay={{ data: NEPAL_BOUNDARY }}
-            />
-          )}
+          <MapWidget
+            locations={[]}
+            height="450px"
+            showControls
+            cluster={false}
+            geoJsonOverlay={{ data: NEPAL_BOUNDARY }}
+          />
         </div>
       </section>
 
       {/* CTA */}
       <section className="bg-secondary-soft py-16 text-center px-6">
         <h2 className="font-display text-3xl text-text-high mb-4">
-          Ready to Change a Life?
+          Invest in a Woman&apos;s Future
         </h2>
         <p className="text-text-muted mb-8 max-w-lg mx-auto text-base leading-relaxed">
-          For $150 a year, you can give a child in Nepal access to education,
-          meals, and a future full of possibility.
+          For $1,000, you can sponsor a woman through the entire training
+          program — giving her the skills to build an independent livelihood.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
-            href="https://www.his-serve.org/give"
+            href={GIVE_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
-            <Button size="lg" variant="accent">Sponsor a Student</Button>
+            <Button size="lg" variant="accent">Support a Woman&apos;s Training</Button>
           </a>
           <Link to="/our-story">
             <Button variant="secondary" size="lg">

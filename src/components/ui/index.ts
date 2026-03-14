@@ -25,5 +25,5 @@ export type { DataTableProps, DataTableColumn } from './DataTable';
 export { default as LoadingSpinner } from './LoadingSpinner';
 export type { LoadingSpinnerProps } from './LoadingSpinner';
 
-export { default as Pagination } from './Pagination';
-export type { PaginationProps } from './Pagination';
+export { default as MapWidget } from './MapWidget';
+export type { MapWidgetProps } from './MapWidget';

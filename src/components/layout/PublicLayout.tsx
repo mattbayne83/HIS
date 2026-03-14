@@ -1,24 +1,23 @@
 import { useState } from 'react'
-import { Outlet, NavLink } from 'react-router'
+import { Outlet, NavLink, Link } from 'react-router'
 import { Menu, X } from 'lucide-react'
+
+const GIVE_URL = 'https://www.his-serve.org/give'
 
 export function PublicLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const navLinks = [
     { to: '/', label: 'Home' },
-    { to: '/about', label: 'About' },
-    { to: '/programs', label: 'Programs' },
-    { to: '/vss', label: 'Village Schools' },
-    { to: '/news', label: 'News' },
-    { to: '/donate', label: 'Donate' },
-    { to: '/contact', label: 'Contact' },
+    { to: '/our-story', label: 'Our Story' },
+    { to: '/womens-training', label: "Women's Training" },
+    { to: '/student-sponsorship', label: 'Student Sponsorship' },
   ]
 
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-primary text-white shadow-md">
+      <header className="sticky top-0 z-40 bg-primary/95 backdrop-blur-md text-white shadow-lg border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -27,20 +26,31 @@ export function PublicLayout() {
             </NavLink>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-1">
               {navLinks.map(({ to, label }) => (
                 <NavLink
                   key={to}
                   to={to}
+                  end={to === '/'}
                   className={({ isActive }) =>
-                    `font-sans text-sm font-medium transition-colors hover:text-secondary ${
-                      isActive ? 'text-secondary' : 'text-white'
+                    `relative font-sans text-sm font-medium px-3 py-2 rounded-lg transition-all ${
+                      isActive
+                        ? 'text-white bg-white/15 backdrop-blur-sm border-b-2 border-white'
+                        : 'text-white/80 hover:text-white hover:bg-white/10'
                     }`
                   }
                 >
                   {label}
                 </NavLink>
               ))}
+              <a
+                href={GIVE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ml-2 font-sans text-sm font-semibold bg-white/90 hover:bg-white text-primary px-4 py-2 rounded-lg transition-all hover:shadow-lg"
+              >
+                Give
+              </a>
             </nav>
 
             {/* Mobile Hamburger */}
@@ -60,18 +70,28 @@ export function PublicLayout() {
                 <NavLink
                   key={to}
                   to={to}
+                  end={to === '/'}
                   onClick={() => setMobileMenuOpen(false)}
                   className={({ isActive }) =>
-                    `block px-4 py-2 rounded-md font-sans text-sm font-medium transition-colors ${
+                    `block px-4 py-2 rounded-lg font-sans text-sm font-medium transition-all ${
                       isActive
-                        ? 'bg-primary-light text-secondary'
-                        : 'text-white hover:bg-primary-light'
+                        ? 'bg-white/15 backdrop-blur-sm text-white border-l-4 border-white'
+                        : 'text-white/80 hover:bg-white/10 hover:text-white'
                     }`
                   }
                 >
                   {label}
                 </NavLink>
               ))}
+              <a
+                href={GIVE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-2 rounded-lg font-sans text-sm font-semibold bg-white/90 text-primary hover:bg-white transition-all"
+              >
+                Give
+              </a>
             </nav>
           )}
         </div>
@@ -83,53 +103,23 @@ export function PublicLayout() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-primary text-white py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* About */}
-            <div>
-              <h3 className="font-display text-lg font-semibold mb-3">
-                Himalayan Indigenous Services
-              </h3>
-              <p className="text-sm text-white/80 leading-relaxed">
-                Facilitating transformation in Nepal through local partnerships,
-                education, and community development.
-              </p>
-              <p className="text-xs text-white/60 mt-3">
-                501(c)(3) Non-Profit Organization
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 className="font-display text-lg font-semibold mb-3">Quick Links</h3>
-              <ul className="space-y-2">
-                {navLinks.map(({ to, label }) => (
-                  <li key={to}>
-                    <NavLink
-                      to={to}
-                      className="text-sm text-white/80 hover:text-secondary transition-colors"
-                    >
-                      {label}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h3 className="font-display text-lg font-semibold mb-3">Contact</h3>
-              <p className="text-sm text-white/80 leading-relaxed">
-                For more information or to support our mission, please reach out through
-                our contact page.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-white/20 text-center text-sm text-white/60">
-            <p>&copy; {new Date().getFullYear()} Himalayan Indigenous Services. All rights reserved.</p>
-          </div>
+      <footer className="bg-primary text-white py-6">
+        <div className="max-w-6xl mx-auto px-6 text-center space-y-2">
+          <p className="font-display text-lg">Himalayan Indigenous Services</p>
+          <p className="text-sm text-white/70">
+            <a href="mailto:info@his-serve.org" className="hover:text-secondary transition-colors">
+              info@his-serve.org
+            </a>
+            <span className="mx-2">·</span>
+            2073 Foster Circle, Cookeville, TN 38501
+            <span className="mx-2">·</span>
+            501(c)(3) Non-Profit
+          </p>
+          <p className="text-xs text-white/50">
+            &copy; {new Date().getFullYear()} Himalayan Indigenous Services
+            <span className="mx-2">·</span>
+            <Link to="/login" className="hover:text-white/70 transition-colors">Admin</Link>
+          </p>
         </div>
       </footer>
     </div>

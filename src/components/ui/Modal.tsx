@@ -41,23 +41,23 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, size = 'm
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+      {/* Backdrop - Glass Overlay */}
+      <div className="fixed inset-0 glass-overlay" />
 
-      {/* Modal Content */}
+      {/* Modal Content - Glass Surface */}
       <div
-        className={`relative bg-surface rounded-xl border border-border shadow-xl w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col`}
+        className={`relative bg-white/95 backdrop-blur-xl border border-white/30 rounded-3xl shadow-2xl w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-            <h2 className="text-xl font-display font-semibold text-text-high">
+          <div className="flex items-center justify-between px-8 py-6 border-b border-neutral-200/50">
+            <h2 className="text-2xl font-serif font-semibold text-neutral-800">
               {title}
             </h2>
             <button
               onClick={onClose}
-              className="text-text-muted hover:text-text-high transition-colors p-1 rounded-lg hover:bg-surface-alt"
+              className="text-neutral-500 hover:text-neutral-800 transition-colors p-2 rounded-xl hover:bg-neutral-100/50"
             >
               <X className="h-5 w-5" />
             </button>
@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, title, children, size = 'm
         )}
 
         {/* Body */}
-        <div className="px-6 py-4 overflow-y-auto flex-1">
+        <div className="px-8 py-6 overflow-y-auto flex-1">
           {children}
         </div>
       </div>

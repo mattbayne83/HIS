@@ -5,7 +5,6 @@ import type {
   Donor,
   Sponsorship,
   SponsorshipStatus,
-  Donation,
   Article,
   ContentStatus,
   Ministry,
@@ -158,29 +157,6 @@ export async function updateSponsorship(
   return data as Sponsorship
 }
 
-// ── Donations ──
-
-export async function getDonations() {
-  const { data, error } = await supabase
-    .from('donations')
-    .select('*, donor:donors(name)')
-    .order('donation_date', { ascending: false })
-  if (error) throw error
-  return data as Donation[]
-}
-
-export async function createDonation(
-  donation: Omit<Donation, 'id' | 'created_at' | 'donor'>
-) {
-  const { data, error } = await supabase
-    .from('donations')
-    .insert(donation)
-    .select()
-    .single()
-  if (error) throw error
-  return data as Donation
-}
-
 // ── Articles ──
 
 export async function getArticles(status?: ContentStatus) {
@@ -329,7 +305,7 @@ export async function getProfile(id: string) {
 // ── Dashboard Stats ──
 
 export async function getDashboardStats() {
-  const [students, donors, sponsorships, donations] = await Promise.all([
+  const [students, donors, sponsorships] = await Promise.all([
     supabase
       .from('students')
       .select('*', { count: 'exact', head: true })
@@ -339,24 +315,11 @@ export async function getDashboardStats() {
       .from('sponsorships')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'active'),
-    supabase
-      .from('donations')
-      .select('amount_cents')
-      .gte(
-        'donation_date',
-        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-          .toISOString()
-          .split('T')[0]
-      ),
   ])
-
-  const monthlyTotal =
-    donations.data?.reduce((sum, d) => sum + (d.amount_cents ?? 0), 0) ?? 0
 
   return {
     activeStudents: students.count ?? 0,
     totalDonors: donors.count ?? 0,
     activeSponsorships: sponsorships.count ?? 0,
-    monthlyDonationCents: monthlyTotal,
   }
 }

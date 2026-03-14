@@ -17,7 +17,8 @@ export interface DataTableProps<T> {
 
 type SortDirection = 'asc' | 'desc' | null;
 
-function DataTable<T extends Record<string, unknown>>({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function DataTable<T extends Record<string, any>>({
   columns,
   data,
   onRowClick,
