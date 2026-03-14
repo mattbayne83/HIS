@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
 import {
   GraduationCap,
@@ -7,10 +7,7 @@ import {
   ImageIcon,
   ChevronDown,
 } from 'lucide-react'
-import { Card, Button, MapWidget, LoadingSpinner } from '../../components/ui'
-import { useQuery } from '../../hooks/useQuery'
-import { getStudents } from '../../lib/queries'
-import { studentsToGroupedLocations } from '../../utils/mapHelpers'
+import { Card, Button, MapWidget } from '../../components/ui'
 import { NEPAL_BOUNDARY } from '../../data/nepal-boundary'
 
 const GIVE_URL = 'https://www.his-serve.org/give'
@@ -48,16 +45,6 @@ const PROGRAMS = [
 ]
 
 export default function HomePage() {
-  const { data: students, loading: studentsLoading } = useQuery(
-    () => getStudents('active'),
-    [],
-  )
-
-  const mapLocations = useMemo(
-    () => (students ? studentsToGroupedLocations(students) : []),
-    [students],
-  )
-
   // Unsplash photo for hero (Nepal mountain/village scene)
   const [heroImage] = useState('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070&auto=format&fit=crop')
   const [sponsorCount, setSponsorCount] = useState(1)
@@ -362,21 +349,14 @@ export default function HomePage() {
             Stories Across Nepal
           </h2>
           <p className="text-text-muted text-center mb-8 max-w-2xl mx-auto text-base leading-relaxed">
-            Each pin on this map represents a village, a student, a family being transformed. The terrain is rugged — but hope reaches even the most remote places.
+            Serving communities across Nepal — from the Kathmandu Valley to remote mountain villages. The terrain is rugged, but hope reaches even the most remote places.
           </p>
-          {studentsLoading ? (
-            <div className="flex justify-center py-16">
-              <LoadingSpinner />
-            </div>
-          ) : (
-            <MapWidget
-              locations={mapLocations}
-              height="500px"
-              cluster
-              showControls
-              geoJsonOverlay={{ data: NEPAL_BOUNDARY }}
-            />
-          )}
+          <MapWidget
+            locations={[]}
+            height="500px"
+            showControls
+            geoJsonOverlay={{ data: NEPAL_BOUNDARY }}
+          />
         </div>
       </section>
 
