@@ -1,0 +1,4 @@
+name,age,grade,village,region,coordinator,status,notes,photo_filename
+Amit Kumar,12,7,Kathmandu,Central,John Smith,active,Excellent student,amit_kumar.jpg
+Sita Rai,10,5,Pokhara,Western,Jane Doe,active,,sita_rai.jpg
+Rajesh Thapa,8,3,Lalitpur,Central,Bob Johnson,active,Needs sponsorship,

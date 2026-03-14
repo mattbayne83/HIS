@@ -45,6 +45,10 @@ export const router = createBrowserRouter([
         lazy: () => import('./pages/admin/StudentsPage'),
       },
       {
+        path: 'students/bulk-upload',
+        lazy: () => import('./pages/admin/BulkUploadPage'),
+      },
+      {
         path: 'students/:id',
         lazy: () => import('./pages/admin/StudentDetailPage'),
       },

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { Plus, Search } from 'lucide-react'
+import { Plus, Search, Upload } from 'lucide-react'
 import {
   Button,
   Input,
@@ -162,10 +162,16 @@ export default function StudentsPage() {
         <h1 className="text-2xl font-display font-semibold text-text-high">
           Students
         </h1>
-        <Button onClick={openCreate}>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Student
-        </Button>
+        <div className="flex gap-3">
+          <Button variant="secondary" onClick={() => navigate('/admin/students/bulk-upload')}>
+            <Upload className="h-4 w-4 mr-2" />
+            Bulk Upload
+          </Button>
+          <Button onClick={openCreate}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Student
+          </Button>
+        </div>
       </div>
 
       {error && (
