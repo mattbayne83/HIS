@@ -333,7 +333,7 @@ function LayoutPatterns() {
       {/* Feature Section with Background */}
       <section className="relative rounded-3xl overflow-hidden p-12" style={{ minHeight: '400px' }}>
         {/* Background gradient */}
-        <div class="absolute inset-0 bg-gradient-to-br from-[#A67C52] via-[#C9A77C] to-[#DC143C]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#A67C52] via-[#C9A77C] to-[#DC143C]" />
 
         {/* Glass overlay */}
         <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
