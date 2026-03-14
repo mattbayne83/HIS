@@ -78,4 +78,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+], {
+  basename: import.meta.env.BASE_URL, // Use Vite's BASE_URL for GitHub Pages
+})
