@@ -25,12 +25,14 @@ const STATUS_OPTIONS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
   { value: 'graduated', label: 'Graduated' },
+  { value: 'merged', label: 'Merged' },
 ]
 
 const STATUS_BADGE: Record<StudentStatus, 'success' | 'warning' | 'neutral'> = {
   active: 'success',
   inactive: 'warning',
   graduated: 'neutral',
+  merged: 'neutral',
 }
 
 export default function StudentDetailPage() {

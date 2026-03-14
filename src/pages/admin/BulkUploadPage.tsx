@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { ArrowLeft, Download, Upload } from 'lucide-react'
 import Button from '../../components/ui/Button'
@@ -15,7 +15,7 @@ import { autoMatchPhotos, type PhotoMatch } from '../../utils/photoMatcher'
 import { processImages } from '../../utils/imageProcessor'
 import { bulkCreateStudents } from '../../lib/queries'
 import { uploadImage } from '../../lib/storage'
-import type { Student } from '../../types/database'
+import type { Student, StudentStatus } from '../../types/database'
 import Select from '../../components/ui/Select'
 import LoadingSpinner from '../../components/ui/LoadingSpinner'
 
@@ -29,6 +29,7 @@ interface StudentRow {
   status?: string
   notes?: string
   photo_filename?: string
+  [key: string]: string | undefined
 }
 
 const BulkUploadPage = () => {
@@ -100,11 +101,25 @@ const BulkUploadPage = () => {
 
       setParsedRows(data)
 
-      // Validate all rows
-      const validated = data.map((row) => ({
-        data: row,
-        validation: validateStudentRow(row),
-      }))
+      // Validate all rows - convert StudentRow to Record<string, string>
+      const validated = data.map((row) => {
+        // Convert undefined values to empty strings for validation and display
+        const rowData: Record<string, string> = {
+          name: row.name,
+          age: row.age,
+          grade: row.grade,
+          village: row.village,
+          region: row.region,
+          coordinator: row.coordinator ?? '',
+          status: row.status ?? '',
+          notes: row.notes ?? '',
+          photo_filename: row.photo_filename ?? '',
+        }
+        return {
+          data: rowData,
+          validation: validateStudentRow(rowData),
+        }
+      })
 
       setValidationRows(validated)
     } catch (error) {
@@ -164,13 +179,14 @@ const BulkUploadPage = () => {
       // Upload photos and build student records
       const studentsWithPhotos: Omit<
         Student,
-        'id' | 'created_at' | 'updated_at' | 'merged_into_id'
+        'id' | 'created_at' | 'updated_at'
       >[] = []
 
       for (const row of studentsToImport) {
-        // Find matching photo
+        // Find matching photo - use the index from validationRows which matches parsedRows order
+        const rowIndex = validationRows.indexOf(row)
         const photoMatch = photoMatches.find(
-          (m) => m.studentIndex === parsedRows.indexOf(row.data)
+          (m) => m.studentIndex === rowIndex
         )
 
         let photoUrl: string | null = null
@@ -194,12 +210,10 @@ const BulkUploadPage = () => {
           village: row.data.village.trim(),
           region: row.data.region.trim(),
           coordinator: row.data.coordinator?.trim() || '',
-          status: (row.data.status?.trim() as
-            | 'active'
-            | 'inactive'
-            | 'graduated') || 'active',
+          status: (row.data.status?.trim() as StudentStatus) || 'active',
           notes: row.data.notes?.trim() || null,
           photo_url: photoUrl,
+          merged_into_id: null,
         })
       }
 
@@ -580,4 +594,4 @@ const BulkUploadPage = () => {
   )
 }
 
-export default BulkUploadPage
+export { BulkUploadPage as Component }

@@ -41,8 +41,8 @@ export function validateStudentRow(
   }
 
   // Optional fields
-  if (row.status && !['active', 'inactive', 'graduated'].includes(row.status)) {
-    errors.push('Status must be: active, inactive, or graduated')
+  if (row.status && !['active', 'inactive', 'graduated', 'merged'].includes(row.status)) {
+    errors.push('Status must be: active, inactive, graduated, or merged')
   }
 
   if (!row.coordinator?.trim()) {
