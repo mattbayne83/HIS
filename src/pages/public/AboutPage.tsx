@@ -1,6 +1,7 @@
-import { ImageIcon, Handshake, Sprout, Heart, GraduationCap, Gift, HandHeart } from 'lucide-react'
+import { Handshake, Sprout, Heart, GraduationCap, Gift, HandHeart } from 'lucide-react'
 import PageHero from '../../components/public/PageHero'
 import { Card, Button } from '../../components/ui'
+import aboutTeamImage from '../../assets/about-team.jpg'
 
 const GIVE_URL = 'https://www.his-serve.org/give'
 
@@ -102,11 +103,12 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-          <div className="bg-surface-alt rounded-xl aspect-[4/3] flex items-center justify-center text-text-muted">
-            <div className="text-center">
-              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-40" />
-              <span className="text-sm">Photo coming soon</span>
-            </div>
+          <div className="rounded-xl aspect-[4/3] overflow-hidden shadow-lg">
+            <img
+              src={aboutTeamImage}
+              alt="HIS team and local partners in Nepal"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </section>

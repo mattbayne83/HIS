@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router'
-import { ImageIcon, UserPlus, Heart, GraduationCap } from 'lucide-react'
+import { UserPlus, Heart, GraduationCap } from 'lucide-react'
 import PageHero from '../../components/public/PageHero'
 import { Button, MapWidget, LoadingSpinner } from '../../components/ui'
 import { useQuery } from '../../hooks/useQuery'
 import { getStudents } from '../../lib/queries'
 import { studentsToGroupedLocations } from '../../utils/mapHelpers'
 import { NEPAL_BOUNDARY } from '../../data/nepal-boundary'
+import studentSponsorshipImage from '../../assets/student-sponsorship.jpg'
 
 const STEPS = [
   {
@@ -83,11 +84,12 @@ export default function VssPage() {
               </p>
             </div>
           </div>
-          <div className="bg-surface-alt rounded-xl aspect-[4/3] flex items-center justify-center text-text-muted">
-            <div className="text-center">
-              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-40" />
-              <span className="text-sm">Photo coming soon</span>
-            </div>
+          <div className="rounded-xl aspect-[4/3] overflow-hidden shadow-lg">
+            <img
+              src={studentSponsorshipImage}
+              alt="Village students in Nepal"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </section>

@@ -258,10 +258,27 @@ Helper function: `is_admin()` checks if current user's profile role = `admin`.
    - Does user's profile have `role = 'admin'`? (show unauthorized if not)
 5. On logout: `signOut()` → `clearAuth()` → navigate to `/login`
 
-## Deployment Notes
+## Deployment
 
-- **Not yet deployed** — development only
-- Supabase project: `hkaidlwfnbzswejlhbhl.supabase.co`
-- Migrations must be run manually in Supabase SQL Editor
-- After creating a user, manually promote: `UPDATE profiles SET role = 'admin' WHERE id = '<uuid>'`
-- Supabase Storage bucket `images` must be created manually in dashboard
+### GitHub Pages
+- **Live URL**: https://mattbayne83.github.io/HIS/
+- **Workflow**: `.github/workflows/deploy.yml`
+  - Triggers on push to `main` branch
+  - Uses GitHub Secrets: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+  - Builds with `npm ci && npm run build`
+  - Deploys to `gh-pages` via GitHub Actions
+- **Configuration**:
+  - `vite.config.ts`: `base: '/HIS/'` (GitHub Pages path)
+  - `src/router.tsx`: `basename: import.meta.env.BASE_URL`
+
+### Supabase
+- **Project**: `hkaidlwfnbzswejlhbhl.supabase.co`
+- **Migrations**: Run manually in Supabase SQL Editor (files in `supabase/migrations/`)
+- **RLS**: Enabled on all tables (see `002_rls_policies.sql`)
+- **Storage bucket**: `images` — must be created manually in Supabase dashboard
+- **Admin setup**: After creating first user, manually promote: `UPDATE profiles SET role = 'admin' WHERE id = '<uuid>'`
+
+### Security Notes
+- **Supabase anon key** is public (by design) — protected by RLS
+- **Students table**: Admin-only access (public reads blocked for privacy)
+- **HomePage**: Does NOT fetch student data — uses empty locations array for map

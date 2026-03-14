@@ -4,11 +4,12 @@ import {
   GraduationCap,
   Heart,
   Users,
-  ImageIcon,
   ChevronDown,
 } from 'lucide-react'
 import { Card, Button, MapWidget } from '../../components/ui'
 import { NEPAL_BOUNDARY } from '../../data/nepal-boundary'
+import heroBackground from '../../assets/hero-background.jpg'
+import classroomScene from '../../assets/classroom-scene.jpg'
 
 const GIVE_URL = 'https://www.his-serve.org/give'
 
@@ -45,8 +46,6 @@ const PROGRAMS = [
 ]
 
 export default function HomePage() {
-  // Unsplash photo for hero (Nepal mountain/village scene)
-  const [heroImage] = useState('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=2070&auto=format&fit=crop')
   const [sponsorCount, setSponsorCount] = useState(1)
   const [parallaxOffset, setParallaxOffset] = useState(0)
   const totalImpact = sponsorCount * 150
@@ -68,17 +67,15 @@ export default function HomePage() {
       {/* Hero - Immersive Storytelling */}
       <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}
-        {heroImage && (
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-100 ease-out"
-            style={{
-              backgroundImage: `url(${heroImage})`,
-              transform: `translateY(${parallaxOffset}px)`,
-              top: '-20%',
-              height: '120%',
-            }}
-          />
-        )}
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-100 ease-out"
+          style={{
+            backgroundImage: `url(${heroBackground})`,
+            transform: `translateY(${parallaxOffset}px)`,
+            top: '-20%',
+            height: '120%',
+          }}
+        />
 
         {/* Gradient Overlay - Depth & Drama */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#DC143C]/80 via-[#A67C52]/60 to-[#1F1812]/70" />
@@ -269,12 +266,12 @@ export default function HomePage() {
       {/* Mission Snapshot */}
       <section className="py-16 md:py-20 bg-accent-soft">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-          <div className="bg-white/40 backdrop-blur-sm border border-white/50 rounded-2xl aspect-[4/3] flex items-center justify-center text-text-muted shadow-lg overflow-hidden">
-            <div className="text-center p-8">
-              <ImageIcon className="w-16 h-16 mx-auto mb-3 opacity-30 text-secondary" />
-              <p className="text-sm text-text-muted">Photo placeholder</p>
-              <p className="text-xs text-text-muted/60 mt-1">Nepal classroom scene</p>
-            </div>
+          <div className="rounded-2xl aspect-[4/3] overflow-hidden shadow-lg">
+            <img
+              src={classroomScene}
+              alt="Nepal classroom scene"
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wide mb-4">

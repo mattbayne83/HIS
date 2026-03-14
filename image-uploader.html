@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HIS Image Uploader</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #1a5a7a 0%, #2d4a3e 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .instructions {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 30px;
+    }
+
+    .instructions h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .instructions ul {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+
+    .upload-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .upload-card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .upload-card.hero {
+      grid-column: 1 / -1;
+    }
+
+    .card-header {
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      color: #1a5a7a;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .card-meta {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 2px;
+    }
+
+    .card-description {
+      font-size: 0.85rem;
+      color: #888;
+      font-style: italic;
+    }
+
+    .upload-zone {
+      border: 2px dashed #ccc;
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #f9f9f9;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-zone:hover {
+      border-color: #1a5a7a;
+      background: #f0f7fa;
+    }
+
+    .upload-zone.dragover {
+      border-color: #2d4a3e;
+      background: #e8f5e9;
+      transform: scale(1.02);
+    }
+
+    .upload-zone.has-image {
+      padding: 0;
+      border: none;
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      opacity: 0.3;
+    }
+
+    .upload-text {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .preview-image {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .image-info {
+      margin-top: 12px;
+      padding: 12px;
+      background: #f0f7fa;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .image-info.warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .image-info.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .compression-info {
+      margin-top: 8px;
+      padding: 8px;
+      background: #e8f4fd;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #004085;
+      border-left: 3px solid #0066cc;
+    }
+
+    .compression-savings {
+      font-weight: 600;
+      color: #28a745;
+    }
+
+    .remove-btn {
+      margin-top: 12px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    .remove-btn:hover {
+      background: #c82333;
+    }
+
+    .processing {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(26, 90, 122, 0.3);
+      border-radius: 50%;
+      border-top-color: #1a5a7a;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .action-bar {
+      position: sticky;
+      bottom: 20px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: #1a5a7a;
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #145066;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(26, 90, 122, 0.3);
+    }
+
+    .btn-primary:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .status-text {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .status-text.complete {
+      color: #28a745;
+      font-weight: 600;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏔️ HIS Image Uploader</h1>
+      <p class="subtitle">Upload images for the Himalayan Indigenous Services website</p>
+    </header>
+
+    <div class="instructions">
+      <h2>📋 Instructions</h2>
+      <ul>
+        <li>Click or drag images into each box below (any size/format accepted)</li>
+        <li><strong>Automatic compression:</strong> Images are resized to optimal dimensions and compressed for web</li>
+        <li>Green = perfect, Yellow = will work but not ideal</li>
+        <li>See compression savings (before/after) for each image</li>
+        <li>Click "Download All Images" when ready to save them with correct filenames</li>
+      </ul>
+    </div>
+
+    <div class="upload-grid">
+      <!-- Hero Image -->
+      <div class="upload-card hero">
+        <div class="card-header">
+          <div class="card-title">1. Home Page Hero Background</div>
+          <div class="card-meta">Recommended: 2400×1600px (16:10) • JPG/WebP • Under 500KB</div>
+          <div class="card-description">Full-width parallax background - Nepal mountains/village landscape</div>
+        </div>
+        <div class="upload-zone" data-id="hero" data-width="2400" data-height="1600">
+          <div class="upload-icon">🏔️</div>
+          <div class="upload-text">Click or drag image here</div>
+        </div>
+        <input type="file" accept="image/*" data-id="hero">
+      </div>
+
+      <!-- Classroom Scene -->
+      <div class="upload-card">
+        <div class="card-header">
+          <div class="card-title">2. Mission Section</div>
+          <div class="card-meta">Recommended: 1200×900px (4:3) • JPG/WebP • Under 300KB</div>
+          <div class="card-description">Nepal classroom scene - students learning</div>
+        </div>
+        <div class="upload-zone" data-id="classroom" data-width="1200" data-height="900">
+          <div class="upload-icon">📚</div>
+          <div class="upload-text">Click or drag image here</div>
+        </div>
+        <input type="file" accept="image/*" data-id="classroom">
+      </div>
+
+      <!-- Student Sponsorship -->
+      <div class="upload-card">
+        <div class="card-header">
+          <div class="card-title">3. Student Sponsorship Page</div>
+          <div class="card-meta">Recommended: 1200×900px (4:3) • JPG/WebP • Under 300KB</div>
+          <div class="card-description">Village students - showing the impact of sponsorship</div>
+        </div>
+        <div class="upload-zone" data-id="sponsorship" data-width="1200" data-height="900">
+          <div class="upload-icon">🎓</div>
+          <div class="upload-text">Click or drag image here</div>
+        </div>
+        <input type="file" accept="image/*" data-id="sponsorship">
+      </div>
+
+      <!-- About Page -->
+      <div class="upload-card">
+        <div class="card-header">
+          <div class="card-title">4. About Page</div>
+          <div class="card-meta">Recommended: 1200×900px (4:3) • JPG/WebP • Under 300KB</div>
+          <div class="card-description">Team/community photo - local partners in action</div>
+        </div>
+        <div class="upload-zone" data-id="about" data-width="1200" data-height="900">
+          <div class="upload-icon">🤝</div>
+          <div class="upload-text">Click or drag image here</div>
+        </div>
+        <input type="file" accept="image/*" data-id="about">
+      </div>
+
+      <!-- Women's Training -->
+      <div class="upload-card">
+        <div class="card-header">
+          <div class="card-title">5. Women's Training Page</div>
+          <div class="card-meta">Recommended: 1200×900px (4:3) • JPG/WebP • Under 300KB</div>
+          <div class="card-description">RTDC women training - sewing, learning, empowerment</div>
+        </div>
+        <div class="upload-zone" data-id="womens-training" data-width="1200" data-height="900">
+          <div class="upload-icon">✂️</div>
+          <div class="upload-text">Click or drag image here</div>
+        </div>
+        <input type="file" accept="image/*" data-id="womens-training">
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <span class="status-text" id="status">0 of 5 images uploaded</span>
+      <button class="btn btn-primary" id="downloadBtn" disabled>Download All Images</button>
+    </div>
+  </div>
+
+  <script>
+    const images = {};
+    const fileMapping = {
+      'hero': 'hero-background.jpg',
+      'classroom': 'classroom-scene.jpg',
+      'sponsorship': 'student-sponsorship.jpg',
+      'about': 'about-team.jpg',
+      'womens-training': 'womens-training.jpg'
+    };
+
+    // Setup drag and drop for all zones
+    document.querySelectorAll('.upload-zone').forEach(zone => {
+      const id = zone.dataset.id;
+      const input = document.querySelector(`input[data-id="${id}"]`);
+
+      // Click to upload
+      zone.addEventListener('click', () => {
+        if (!zone.classList.contains('has-image')) {
+          input.click();
+        }
+      });
+
+      // Drag over
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.classList.add('dragover');
+      });
+
+      zone.addEventListener('dragleave', () => {
+        zone.classList.remove('dragover');
+      });
+
+      // Drop
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('image/')) {
+          handleImage(id, file, zone);
+        }
+      });
+
+      // File input change
+      input.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          handleImage(id, file, zone);
+        }
+      });
+    });
+
+    async function handleImage(id, file, zone) {
+      // Show processing state
+      zone.innerHTML = `
+        <div class="upload-icon"><div class="spinner"></div></div>
+        <div class="upload-text">Processing image...</div>
+      `;
+      zone.classList.add('processing');
+
+      const reader = new FileReader();
+      const img = new Image();
+
+      reader.onload = async (e) => {
+        img.src = e.target.result;
+
+        img.onload = async () => {
+          const recWidth = parseInt(zone.dataset.width);
+          const recHeight = parseInt(zone.dataset.height);
+          const targetSize = id === 'hero' ? 500 * 1024 : 300 * 1024; // 500KB for hero, 300KB for others
+
+          // Compress and resize image
+          const compressed = await compressImage(img, recWidth, recHeight, targetSize, id);
+
+          // Store image data
+          images[id] = {
+            file: file,
+            originalDataUrl: e.target.result,
+            dataUrl: compressed.dataUrl,
+            blob: compressed.blob,
+            originalWidth: img.width,
+            originalHeight: img.height,
+            width: compressed.width,
+            height: compressed.height,
+            originalSize: file.size,
+            size: compressed.size,
+            name: fileMapping[id],
+            savings: ((file.size - compressed.size) / file.size * 100).toFixed(1)
+          };
+
+          // Update UI
+          zone.classList.remove('processing');
+          displayImage(id, zone);
+          updateStatus();
+        };
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    async function compressImage(img, targetWidth, targetHeight, maxSize, id) {
+      // Create canvas
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Calculate dimensions (maintain aspect ratio, fit to target)
+      const aspectRatio = img.width / img.height;
+      const targetAspect = targetWidth / targetHeight;
+
+      let width, height;
+
+      // If image is smaller than target, use original size (don't upscale)
+      if (img.width <= targetWidth && img.height <= targetHeight) {
+        width = img.width;
+        height = img.height;
+      } else {
+        // Scale down to fit target dimensions
+        if (aspectRatio > targetAspect) {
+          width = targetWidth;
+          height = targetWidth / aspectRatio;
+        } else {
+          height = targetHeight;
+          width = targetHeight * aspectRatio;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      // Draw image with high quality
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Compress to target file size
+      let quality = 0.92;
+      let blob, dataUrl;
+
+      do {
+        dataUrl = canvas.toDataURL('image/jpeg', quality);
+        const response = await fetch(dataUrl);
+        blob = await response.blob();
+
+        if (blob.size <= maxSize || quality <= 0.5) break;
+        quality -= 0.05;
+      } while (true);
+
+      return {
+        dataUrl,
+        blob,
+        width: Math.round(width),
+        height: Math.round(height),
+        size: blob.size
+      };
+    }
+
+    function displayImage(id, zone) {
+      const data = images[id];
+      const recWidth = parseInt(zone.dataset.width);
+      const recHeight = parseInt(zone.dataset.height);
+
+      // Check dimensions
+      const widthRatio = data.width / recWidth;
+      const heightRatio = data.height / recHeight;
+      const aspectMatch = Math.abs((data.width / data.height) - (recWidth / recHeight)) < 0.1;
+
+      let infoClass = 'success';
+      let infoText = `✓ Optimized: ${data.width}×${data.height}px • ${(data.size / 1024).toFixed(0)}KB`;
+
+      if (!aspectMatch || widthRatio < 0.8 || heightRatio < 0.8) {
+        infoClass = 'warning';
+        infoText = `⚠️ ${data.width}×${data.height}px • ${(data.size / 1024).toFixed(0)}KB (Target: ${recWidth}×${recHeight}px)`;
+      }
+
+      const compressionHtml = data.savings > 0 ? `
+        <div class="compression-info">
+          📦 Compressed from ${(data.originalSize / 1024).toFixed(0)}KB (${data.originalWidth}×${data.originalHeight}px)
+          <br>
+          <span class="compression-savings">Saved ${data.savings}% • Ready for web!</span>
+        </div>
+      ` : '';
+
+      zone.innerHTML = `
+        <img src="${data.dataUrl}" class="preview-image" alt="Preview">
+        <div class="image-info ${infoClass}">${infoText}</div>
+        ${compressionHtml}
+        <button class="remove-btn" onclick="removeImage('${id}')">Remove & Replace</button>
+      `;
+      zone.classList.add('has-image');
+    }
+
+    function removeImage(id) {
+      delete images[id];
+      const zone = document.querySelector(`.upload-zone[data-id="${id}"]`);
+      const icon = zone.dataset.id === 'hero' ? '🏔️' :
+                   zone.dataset.id === 'classroom' ? '📚' :
+                   zone.dataset.id === 'sponsorship' ? '🎓' :
+                   zone.dataset.id === 'about' ? '🤝' : '✂️';
+
+      zone.innerHTML = `
+        <div class="upload-icon">${icon}</div>
+        <div class="upload-text">Click or drag image here</div>
+      `;
+      zone.classList.remove('has-image');
+      updateStatus();
+    }
+
+    function updateStatus() {
+      const count = Object.keys(images).length;
+      const status = document.getElementById('status');
+      const btn = document.getElementById('downloadBtn');
+
+      status.textContent = `${count} of 5 images uploaded`;
+      if (count === 5) {
+        status.textContent = '✓ All images ready!';
+        status.classList.add('complete');
+        btn.disabled = false;
+      } else {
+        status.classList.remove('complete');
+        btn.disabled = true;
+      }
+    }
+
+    // Download all images as a zip-like batch
+    document.getElementById('downloadBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('downloadBtn');
+      const originalText = btn.textContent;
+      btn.textContent = 'Downloading...';
+      btn.disabled = true;
+
+      for (const [id, data] of Object.entries(images)) {
+        // Create blob URL for download
+        const blobUrl = URL.createObjectURL(data.blob);
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = data.name;
+        link.click();
+
+        // Clean up blob URL
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+        await new Promise(resolve => setTimeout(resolve, 200));
+      }
+
+      btn.textContent = '✓ Downloaded!';
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }, 2000);
+
+      alert('All images downloaded! ✓\n\n📂 Check your Downloads folder.\n\n➡️ Next step: Tell Claude "Images are ready in Downloads" and I\'ll integrate them into the HIS project.');
+    });
+  </script>
+</body>
+</html>

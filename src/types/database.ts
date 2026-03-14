@@ -1,5 +1,5 @@
 export type UserRole = 'admin' | 'editor' | 'viewer'
-export type StudentStatus = 'active' | 'inactive' | 'graduated'
+export type StudentStatus = 'active' | 'inactive' | 'graduated' | 'merged'
 export type SponsorshipStatus = 'active' | 'ended'
 export type ContentStatus = 'draft' | 'published'
 
@@ -21,6 +21,7 @@ export interface Student {
   photo_url: string | null
   status: StudentStatus
   notes: string | null
+  merged_into_id: string | null
   created_at: string
   updated_at: string
 }
@@ -93,4 +94,21 @@ export interface Ministry {
   sort_order: number
   created_at: string
   updated_at: string
+}
+
+// Phase 1: Duplicate Detection & Merge Support
+
+export interface StudentMergeLog {
+  id: string
+  kept_student_id: string
+  merged_student_id: string
+  field_selections: Record<string, 'A' | 'B'>
+  merged_by: string
+  merged_at: string
+}
+
+export interface DuplicateCandidate {
+  student: Student
+  matchScore: number
+  reasons: string[]
 }

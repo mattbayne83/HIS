@@ -16,7 +16,8 @@ Managed by Bob Bayne. Existing site: https://www.his-serve.org/
 ## Architecture
 
 ### Routing
-- `src/router.tsx` — `createBrowserRouter` with two route groups:
+- `src/router.tsx` — `createBrowserRouter` with `basename: import.meta.env.BASE_URL` for GitHub Pages
+- Two route groups:
   - `/` — PublicLayout wrapping public pages (eagerly loaded)
   - `/admin` — AuthGuard → AdminLayout wrapping admin pages (lazy loaded via `lazy()`)
 - Admin pages export `{ XPage as Component }` for react-router lazy loading
@@ -88,15 +89,25 @@ npm run lint     # ESLint
 npm run preview  # Preview production build
 ```
 
+## Deployment
+
+### GitHub Pages
+- **URL**: https://mattbayne83.github.io/HIS/
+- **Workflow**: `.github/workflows/deploy.yml` — auto-deploy on push to `main`
+- **Config**: `vite.config.ts` has `base: '/HIS/'` for GitHub Pages path
+- **Secrets**: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` configured in GitHub repo secrets
+
 ## Gotchas
-- `.env.local` required for Supabase — see `.env.local.example`
+- `.env.local` required for Supabase locally — see `.env.local.example`
 - Auth state is NOT persisted in localStorage — rehydrated from Supabase session
 - `his-storage` is the localStorage key — don't change
 - Image storage bucket `images` — must be created in Supabase dashboard
-- Admin pages must export `{ XPage as Component }` for lazy loading
+- Admin pages must export `{ XPage as Component }` for react-router lazy loading
 - DataTable generic uses `Record<string, any>` — TS interfaces satisfy this
 - Badge uses `label` prop, NOT children
 - Article body stored as JSONB `{ text: string }` — plain text for now
-- Public pages are mostly skeleton/placeholder — admin pages are fully built
+- **HomePage does NOT fetch student data** — uses empty locations array for map (security/privacy)
+- **RLS blocks public student access** — students table requires admin role for all operations
 - SQL migrations must be run manually in Supabase SQL Editor
 - After creating a user, manually set `role = 'admin'` in profiles table
+- **GitHub Pages deployment**: basename configured in router, base path in vite.config.ts

@@ -9,6 +9,7 @@ import type {
   ContentStatus,
   Ministry,
   Profile,
+  StudentMergeLog,
 } from '../types/database'
 
 // ── Students ──
@@ -322,4 +323,121 @@ export async function getDashboardStats() {
     totalDonors: donors.count ?? 0,
     activeSponsorships: sponsorships.count ?? 0,
   }
+}
+
+// ── Phase 1: Bulk Upload & Duplicate Detection ──
+
+/**
+ * Bulk insert students (for CSV/Excel import)
+ * Returns inserted students with generated IDs
+ */
+export async function bulkCreateStudents(
+  students: Omit<Student, 'id' | 'created_at' | 'updated_at' | 'merged_into_id'>[]
+) {
+  const { data, error } = await supabase
+    .from('students')
+    .insert(students)
+    .select()
+
+  if (error) throw error
+  return data as Student[]
+}
+
+/**
+ * Find potential duplicate students using the database function
+ * Returns candidates for client-side fuzzy name matching
+ */
+export async function findPotentialDuplicates(
+  name: string,
+  village: string,
+  region: string,
+  age: number,
+  excludeId?: string
+) {
+  const { data, error } = await supabase.rpc('find_potential_duplicates', {
+    p_name: name,
+    p_village: village,
+    p_region: region,
+    p_age: age,
+    p_exclude_id: excludeId || null,
+  })
+
+  if (error) throw error
+  return data as Array<{
+    student_id: string
+    name: string
+    village: string
+    region: string
+    age: number
+    grade: string
+    photo_url: string | null
+  }>
+}
+
+/**
+ * Merge two student records
+ * 1. Update kept student with selected field values
+ * 2. Reassign sponsorships from merged student to kept student
+ * 3. Mark merged student as 'merged' with merged_into_id
+ * 4. Log the merge operation
+ */
+export async function mergeStudents(
+  keptId: string,
+  mergedId: string,
+  fieldSelections: Record<string, 'A' | 'B'>,
+  keptStudentUpdates: Partial<Student>,
+  mergedBy: string
+) {
+  // Step 1: Update kept student with selected field values
+  const { error: updateError } = await supabase
+    .from('students')
+    .update(keptStudentUpdates)
+    .eq('id', keptId)
+
+  if (updateError) throw updateError
+
+  // Step 2: Reassign sponsorships from merged student to kept student
+  const { error: sponsorshipError } = await supabase
+    .from('sponsorships')
+    .update({ student_id: keptId })
+    .eq('student_id', mergedId)
+
+  if (sponsorshipError) throw sponsorshipError
+
+  // Step 3: Mark merged student as merged
+  const { error: mergeError } = await supabase
+    .from('students')
+    .update({
+      status: 'merged',
+      merged_into_id: keptId,
+    })
+    .eq('id', mergedId)
+
+  if (mergeError) throw mergeError
+
+  // Step 4: Log the merge operation
+  const { error: logError } = await supabase
+    .from('student_merge_log')
+    .insert({
+      kept_student_id: keptId,
+      merged_student_id: mergedId,
+      field_selections: fieldSelections,
+      merged_by: mergedBy,
+    })
+
+  if (logError) throw logError
+}
+
+/**
+ * Get merge log for a student (useful for audit trail)
+ */
+export async function getStudentMergeLog(studentId: string) {
+  const { data, error } = await supabase
+    .from('student_merge_log')
+    .select('*')
+    .or(`kept_student_id.eq.${studentId},merged_student_id.eq.${studentId}`)
+    .order('merged_at', { ascending: false })
+
+  if (error) throw error
+  return data as StudentMergeLog[]
 }

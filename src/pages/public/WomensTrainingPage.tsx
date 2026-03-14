@@ -1,8 +1,9 @@
 import { Link } from 'react-router'
-import { ImageIcon, UserPlus, Sparkles, Award } from 'lucide-react'
+import { UserPlus, Sparkles, Award } from 'lucide-react'
 import PageHero from '../../components/public/PageHero'
 import { Button, MapWidget } from '../../components/ui'
 import { NEPAL_BOUNDARY } from '../../data/nepal-boundary'
+import womensTrainingImage from '../../assets/womens-training.jpg'
 
 const GIVE_URL = 'https://www.his-serve.org/give'
 
@@ -71,11 +72,12 @@ export default function WomensTrainingPage() {
               </p>
             </div>
           </div>
-          <div className="bg-surface-alt rounded-xl aspect-[4/3] flex items-center justify-center text-text-muted">
-            <div className="text-center">
-              <ImageIcon className="w-12 h-12 mx-auto mb-2 opacity-40" />
-              <span className="text-sm">Photo coming soon</span>
-            </div>
+          <div className="rounded-xl aspect-[4/3] overflow-hidden shadow-lg">
+            <img
+              src={womensTrainingImage}
+              alt="Women learning sewing skills at RTDC training center"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       </section>

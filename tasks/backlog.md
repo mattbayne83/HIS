@@ -21,15 +21,27 @@
 
 ## P1 — Should Have (Polish & Usability)
 
+### VSS Epic — Field Data Management
+**See detailed plan**: [tasks/vss-features-plan.md](vss-features-plan.md)
+**Schema implementation**: ✅ [Complete](phase1-implementation-complete.md) (March 14, 2026)
+
+**Phase 1: Foundation (Week 1-2)**
+- [ ] Feature 1: Bulk upload of photos and child information (CSV/Excel + photo batch)
+- [ ] Feature 3: Duplicate detection and merge logic (fuzzy matching + merge UI)
+
+**Phase 2: Power Tools (Week 3)**
+- [ ] Feature 4: Bulk select and export (CSV, PDF, photo ZIP)
+
+**Phase 3: Field Integration (Week 4-5)**
+- [ ] Feature 2: Email to submit new/changes (Supabase Edge Function + review queue)
+
 ### Admin Enhancements
-- [ ] Student photo upload (Supabase Storage integration)
 - [ ] PdfExportPage — student profile PDF generation (skeleton exists)
 - [ ] Article rich text editor (replace plain textarea with markdown or WYSIWYG)
 - [ ] Article featured image upload
 - [ ] Ministry featured image upload
 - [ ] Donation summary/reporting (totals by month, by donor, by purpose)
 - [ ] Sponsorship: show unsponsored students for quick matching
-- [ ] Bulk student import (CSV upload)
 
 ### Public Site Polish
 - [ ] SEO meta tags (title, description, og:image per page)
@@ -55,14 +67,20 @@
 - [ ] Blog/newsletter subscription
 
 ### Infrastructure
-- [ ] Deployment to Cloudflare Pages or Vercel
-- [ ] CI/CD pipeline (GitHub Actions)
 - [ ] Automated testing (Vitest + React Testing Library)
 - [ ] Supabase Edge Functions for server-side logic
 - [ ] Image optimization (WebP conversion, thumbnails)
 
 ## Completed
 
+**Deployment & GitHub Pages (March 2026)**
+- [x] GitHub Actions workflow for auto-deployment
+- [x] GitHub Pages configuration (base path, router basename)
+- [x] Supabase environment variables via GitHub Secrets
+- [x] Fix HomePage: remove student data query (RLS/privacy issue)
+- [x] Deploy to https://mattbayne83.github.io/HIS/
+
+**Initial Build (March 2026)**
 - [x] Project scaffold (React 19, TS, Vite 7, Tailwind 4, Supabase)
 - [x] Design system (Nepal-inspired palette, tokens in index.css)
 - [x] Supabase client, auth, storage utilities
