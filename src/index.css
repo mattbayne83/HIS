@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/*
+  HIS Design System — Nepal-inspired palette
+
+  Primary:    Deep Mountain Blue (#1B3A5C) — trust, depth, Himalayan sky
+  Secondary:  Temple Gold (#C4922A) — warmth, Nepal's temples & prayer flags
+  Accent:     Saffron Orange (#E07B2E) — energy, marigolds, cultural vibrancy
+  Success:    Highland Green (#2D6A4F) — growth, terraced hillsides
+  Background: Warm White (#FAF8F5) — natural, paper-like warmth
+  Surface:    Soft Sand (#F0ECE4) — earthy, inviting
+  Text High:  Slate (#1E293B) — readability
+  Text Muted: Stone (#6B7280) — secondary text
+  Danger:     Brick Red (#B91C1C) — alerts
+*/
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'DM Serif Display', serif;
+
+  --color-primary: #1B3A5C;
+  --color-primary-light: #2A5580;
+  --color-secondary: #C4922A;
+  --color-secondary-light: #D4A643;
+  --color-accent: #E07B2E;
+  --color-accent-light: #F09A52;
+  --color-success: #2D6A4F;
+  --color-danger: #B91C1C;
+  --color-background: #FAF8F5;
+  --color-surface: #F0ECE4;
+  --color-surface-alt: #E8E3D9;
+  --color-text-high: #1E293B;
+  --color-text-muted: #6B7280;
+  --color-border: #D6D0C4;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text-high);
+}
