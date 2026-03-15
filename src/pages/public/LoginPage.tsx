@@ -29,15 +29,15 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-6">
       <div className="w-full max-w-md">
-        <div className="bg-surface border border-border rounded-lg shadow-sm p-8">
-          <h1 className="font-display text-3xl text-text-high mb-2 text-center">
+        <div className="glass-heavy rounded-3xl shadow-2xl p-8 border border-white/30">
+          <h1 className="font-display text-4xl font-bold text-primary mb-2 text-center">
             Admin Login
           </h1>
-          <p className="text-text-muted text-center mb-8">
+          <p className="text-neutral-600 text-center mb-8 font-medium">
             Sign in to access the admin dashboard
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <Input
               label="Email"
               type="email"
@@ -45,6 +45,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
+              className="glass-light"
             />
 
             <Input
@@ -54,27 +55,30 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
+              className="glass-light"
             />
 
             {error && (
-              <div className="bg-red-50 border border-danger text-danger px-4 py-3 rounded-lg text-sm">
+              <div className="bg-red-50/50 backdrop-blur-sm border border-danger/30 text-danger px-4 py-3 rounded-xl text-sm font-medium">
                 {error}
               </div>
             )}
 
             <Button
               type="submit"
-              variant="primary"
+              variant="glass-primary"
               fullWidth
               loading={loading}
+              size="lg"
+              className="shadow-xl shadow-primary/20"
             >
               Sign In
             </Button>
 
-            <div className="text-center mt-4">
+            <div className="text-center mt-6">
               <Link
                 to="/reset-password"
-                className="text-sm text-primary hover:underline"
+                className="text-sm font-medium text-neutral-500 hover:text-primary transition-colors duration-200 underline-offset-4 hover:underline"
               >
                 Forgot password?
               </Link>

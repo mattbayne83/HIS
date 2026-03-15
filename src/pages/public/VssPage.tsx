@@ -58,7 +58,7 @@ export default function VssPage() {
       />
 
       {/* Program Overview */}
-      <section className="max-w-6xl mx-auto px-6 py-16 md:py-20">
+      <section className="max-w-6xl mx-auto px-6 py-16 md:py-24">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="font-display text-3xl text-text-high mb-4">
@@ -95,7 +95,7 @@ export default function VssPage() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-accent-soft py-16 md:py-20">
+      <section className="bg-accent-soft py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="font-display text-3xl text-text-high text-center mb-10">
             How It Works
@@ -137,9 +137,9 @@ export default function VssPage() {
       </section>
 
       {/* Where We Serve */}
-      <section className="bg-surface py-16 md:py-20">
+      <section className="bg-surface py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="font-display text-3xl text-text-high text-center mb-3">
+          <h2 className="font-display text-3xl text-text-high text-center mb-4">
             Where We Serve
           </h2>
           <p className="text-text-muted text-center mb-8 max-w-2xl mx-auto text-base leading-relaxed">

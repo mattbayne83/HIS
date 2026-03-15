@@ -14,7 +14,6 @@
 @theme {
   /* Fonts */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
   --font-display: 'Cormorant Garamond', Georgia, serif;
 
   /* Primary — Crimson Red (Nepal flag, urgency) */
@@ -87,7 +86,7 @@ body {
 }
 
 /* Glassmorphism Utility Classes */
-.glass-surface {
+.glass-medium {
   background: rgba(255, 255, 255, var(--glass-opacity));
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
@@ -95,7 +94,7 @@ body {
   box-shadow: var(--glass-shadow);
 }
 
-.glass-surface-light {
+.glass-heavy {
   background: rgba(253, 252, 251, var(--glass-opacity-light));
   backdrop-filter: blur(var(--glass-blur-heavy));
   -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
@@ -103,7 +102,7 @@ body {
   box-shadow: var(--glass-shadow-heavy);
 }
 
-.glass-surface-subtle {
+.glass-light {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(var(--glass-blur-subtle));
   -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
@@ -114,6 +113,40 @@ body {
   background: rgba(31, 24, 18, 0.4);
   backdrop-filter: blur(var(--glass-blur-subtle));
   -webkit-backdrop-filter: blur(var(--glass-blur-subtle));
+}
+
+/* Animations */
+@keyframes lift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-4px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-lift {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.animate-lift:hover {
+  transform: translateY(-4px);
+}
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Focus States */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2;
 }
 
 /* Typography Classes */

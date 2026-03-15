@@ -74,18 +74,10 @@ export default function HomePage() {
         />
 
         {/* Gradient Overlay - Depth & Drama */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#DC143C]/80 via-[#A67C52]/60 to-[#1F1812]/70" />
-
-        {/* Glass Overlay - Subtle Frosted Effect */}
-        <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#DC143C]/60 via-[#A67C52]/40 to-[#1F1812]/50" />
 
         {/* Content */}
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center text-white">
-          {/* Eyebrow */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
-            <span className="text-sm font-semibold tracking-wide uppercase">Nepal · Education · Hope</span>
-          </div>
-
           {/* Headline */}
           <h1 className="font-serif text-5xl md:text-7xl font-bold mb-6 leading-tight">
             $150 Changes<br />Everything
@@ -106,13 +98,13 @@ export default function HomePage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button size="lg" variant="primary" className="shadow-2xl shadow-primary/40 hover:shadow-primary/60">
-                Sponsor a Student
+              <Button size="lg" variant="primary" className="shadow-2xl shadow-primary/40 hover:shadow-primary/60 px-12">
+                Sponsor a Student — $150/year
               </Button>
             </a>
             <Link to="/student-sponsorship">
-              <Button size="lg" variant="accent" className="shadow-xl">
-                See the Impact
+              <Button size="md" variant="ghost" className="text-white border border-white/30 hover:bg-white/10">
+                Learn More →
               </Button>
             </Link>
           </div>
@@ -125,9 +117,9 @@ export default function HomePage() {
       </section>
 
       {/* Every Number Has a Name */}
-      <section className="bg-gradient-to-b from-secondary-soft to-white py-20">
+      <section className="bg-gradient-to-b from-secondary-soft to-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="font-serif text-3xl md:text-4xl text-center text-text-high mb-3">
+          <h2 className="font-serif text-3xl md:text-4xl text-center text-text-high mb-4">
             Every Number Has a Name
           </h2>
           <p className="text-center text-text-muted mb-12 max-w-2xl mx-auto">
@@ -136,13 +128,13 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Story Card 1 - Student */}
-            <Card variant="glass" interactive padding="lg">
+            <Card variant="glass-medium" interactive padding="lg">
               <div className="text-center">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary-light mx-auto mb-4 flex items-center justify-center">
                   <GraduationCap className="w-10 h-10 text-white" />
                 </div>
                 <p className="font-serif text-4xl text-primary mb-2">160+</p>
-                <p className="font-semibold text-text-high mb-3">Students Sponsored</p>
+                <p className="font-semibold text-text-high mb-4">Students Sponsored</p>
                 <p className="text-sm text-text-muted leading-relaxed">
                   Like the 12-year-old girl who now reads at grade level after two years of sponsored education. She dreams of becoming a teacher.
                 </p>
@@ -150,13 +142,13 @@ export default function HomePage() {
             </Card>
 
             {/* Story Card 2 - Graduate */}
-            <Card variant="glass" interactive padding="lg">
+            <Card variant="glass-medium" interactive padding="lg">
               <div className="text-center">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-secondary to-secondary-light mx-auto mb-4 flex items-center justify-center">
                   <Heart className="w-10 h-10 text-white" />
                 </div>
                 <p className="font-serif text-4xl text-secondary mb-2">260+</p>
-                <p className="font-semibold text-text-high mb-3">RTDC Graduates</p>
+                <p className="font-semibold text-text-high mb-4">RTDC Graduates</p>
                 <p className="text-sm text-text-muted leading-relaxed">
                   Women who arrived uncertain and left with sewing skills, confidence, and a source of income for their families.
                 </p>
@@ -164,13 +156,13 @@ export default function HomePage() {
             </Card>
 
             {/* Story Card 3 - Leader */}
-            <Card variant="glass" interactive padding="lg">
+            <Card variant="glass-medium" interactive padding="lg">
               <div className="text-center">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-accent-dark mx-auto mb-4 flex items-center justify-center">
-                  <Users className="w-10 h-10 text-neutral-700" />
+                  <Users className="w-10 h-10 text-white" />
                 </div>
                 <p className="font-serif text-4xl text-accent-dark mb-2">150+</p>
-                <p className="font-semibold text-text-high mb-3">Leaders Trained</p>
+                <p className="font-semibold text-text-high mb-4">Leaders Trained</p>
                 <p className="text-sm text-text-muted leading-relaxed">
                   Local pastors, teachers, and organizers now equipped to serve their communities with skill and compassion.
                 </p>
@@ -180,7 +172,7 @@ export default function HomePage() {
 
           {/* Timeline Callout */}
           <div className="text-center">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass-surface">
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full glass-medium">
               <span className="font-serif text-2xl text-primary">2018</span>
               <span className="text-text-muted">·</span>
               <span className="text-sm text-text-muted">Year we started this journey together</span>
@@ -190,9 +182,9 @@ export default function HomePage() {
       </section>
 
       {/* Collective Impact */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="font-serif text-3xl md:text-4xl text-center text-text-high mb-3">
+          <h2 className="font-serif text-3xl md:text-4xl text-center text-text-high mb-4">
             See Your Impact
           </h2>
           <p className="text-center text-text-muted mb-12 max-w-2xl mx-auto">
@@ -201,10 +193,10 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-3 gap-8 mb-10">
             {IMPACT_STATS.map((stat) => (
-              <Card key={stat.label} variant="glass" padding="lg">
+              <Card key={stat.label} variant="glass-medium" padding="lg">
                 <div className="text-center">
                   <p className="font-serif text-5xl text-primary mb-2">{stat.value}</p>
-                  <p className="font-semibold text-text-high mb-3 text-lg">{stat.label}</p>
+                  <p className="font-semibold text-text-high mb-4 text-lg">{stat.label}</p>
                   <p className="text-sm text-text-muted leading-relaxed">{stat.description}</p>
                 </div>
               </Card>
@@ -225,7 +217,7 @@ export default function HomePage() {
       </section>
 
       {/* Mission Snapshot */}
-      <section className="py-16 md:py-20 bg-accent-soft">
+      <section className="py-16 md:py-24 bg-accent-soft">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
           <div className="rounded-2xl aspect-[4/3] overflow-hidden shadow-lg">
             <img
@@ -255,9 +247,9 @@ export default function HomePage() {
       </section>
 
       {/* Program Highlights */}
-      <section className="bg-white py-16 md:py-20">
+      <section className="bg-white py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="font-serif text-3xl md:text-4xl text-text-high text-center mb-3">
+          <h2 className="font-serif text-3xl md:text-4xl text-text-high text-center mb-4">
             How We Serve
           </h2>
           <p className="text-center text-text-muted mb-12 max-w-2xl mx-auto">
@@ -265,7 +257,7 @@ export default function HomePage() {
           </p>
           <div className="grid md:grid-cols-3 gap-6">
             {PROGRAMS.map((p) => (
-              <Card key={p.title} variant="glass" padding="lg" interactive>
+              <Card key={p.title} variant="glass-medium" padding="lg" interactive>
                 <div className="h-full flex flex-col">
                   {/* Icon */}
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 text-primary mb-4">
@@ -273,7 +265,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-serif text-xl text-text-high mb-3">
+                  <h3 className="font-serif text-xl text-text-high mb-4">
                     {p.title}
                   </h3>
 
@@ -288,7 +280,10 @@ export default function HomePage() {
                   </p>
 
                   {/* CTA */}
-                  <Link to={p.link}>
+                  <Link
+                    to={p.link}
+                    className="focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 rounded-xl"
+                  >
                     <Button size="sm" variant="secondary" className="w-full">
                       Learn More
                     </Button>
@@ -301,9 +296,9 @@ export default function HomePage() {
       </section>
 
       {/* Where We Work */}
-      <section className="bg-gradient-to-b from-white to-secondary-soft py-16 md:py-20">
+      <section className="bg-gradient-to-b from-white to-secondary-soft py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
-          <h2 className="font-serif text-3xl md:text-4xl text-text-high text-center mb-3">
+          <h2 className="font-serif text-3xl md:text-4xl text-text-high text-center mb-4">
             Stories Across Nepal
           </h2>
           <p className="text-text-muted text-center mb-8 max-w-2xl mx-auto text-base leading-relaxed">
@@ -319,7 +314,7 @@ export default function HomePage() {
       </section>
 
       {/* Final CTA - Emotional Close */}
-      <section className="relative py-20 md:py-28 overflow-hidden">
+      <section className="relative py-20 md:py-32 overflow-hidden">
         {/* Background with subtle texture */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary-dark to-secondary opacity-95" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjAzIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30" />

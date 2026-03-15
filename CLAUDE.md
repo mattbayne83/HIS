@@ -50,17 +50,18 @@ Each admin CRUD page follows this structure:
 6. Badge for status display
 
 ### Design System — Nepal-Inspired
-- **Primary**: Deep Mountain Blue `#1B3A5C` / Light: `#2A5580`
-- **Secondary**: Temple Gold `#C4922A`
-- **Accent**: Saffron Orange `#E07B2E`
+- **Primary**: Crimson Red `#DC143C` / Light: `#E85472` / Dark: `#A01028`
+- **Secondary**: Mountain Bronze `#A67C52` / Light: `#BF9976` / Dark: `#8B6741`
+- **Accent**: Temple Gold `#D4A574` / Dark: `#B8895E`
 - **Success**: Highland Green `#2D6A4F`
 - **Danger**: Brick Red `#B91C1C`
-- **Background**: Warm White `#FAF8F5`
-- **Surface**: Soft Sand `#F0ECE4` / Alt: `#E8E3D9`
-- **Text High**: `#1E293B` / **Text Muted**: `#6B7280`
+- **Background**: Warm Cream `#F5F1EB`
+- **Surface**: Soft Sand `#E8E3D9`
+- **Text High**: `#1F1812` / **Text Muted**: `#6B7280`
 - **Border**: `#D6D0C4`
 - All tokens in `@theme` block in `src/index.css`
 - Use semantic classes: `bg-primary`, `text-secondary`, `border-border`, etc.
+- **Glassmorphism**: Three variants — `glass-light` (subtle, 0.7 opacity), `glass-medium` (balanced, variable opacity), `glass-heavy` (prominent, heavy blur)
 
 ### Typography Hierarchy
 - **Page Title (h1)**: `text-4xl font-display font-bold` (36px, bold) — Admin page titles
@@ -68,6 +69,12 @@ Each admin CRUD page follows this structure:
 - **Subsection (h3)**: `text-xl font-display font-medium` (20px, medium) — Subsections
 - **Card Header**: `text-base font-sans font-semibold` (16px, semibold) — Component headers
 - **Fonts**: Cormorant Garamond (display), Inter (body)
+
+### Spacing Scale (Base-8 Grid)
+- Use only these spacing values: 2, 4, 6, 8, 12, 16, 20, 24, 32, 48, 64
+- **Never use** arbitrary values like mb-3 (12px) — use mb-4 (16px) instead
+- **Section padding**: `py-16 md:py-24` (standard), `py-20 md:py-32` (emphasis/final CTA)
+- **Card padding**: `lg` (p-8) for prominence, `md` (p-6) for compact layouts
 
 ## Key Files
 - `src/router.tsx` — Route definitions
@@ -84,13 +91,13 @@ Each admin CRUD page follows this structure:
 - `src/components/students/` — DuplicateWarningCard, MergeStudentsModal, MergeHistoryCard
 
 ## UI Component API
-- **Button**: `variant` (primary/secondary/danger), `size` (sm/md/lg), `loading`, `fullWidth` — always shows `cursor-pointer` on hover
+- **Button**: `variant` (primary/secondary/accent/ghost/outline/danger/glass-primary), `size` (sm/md/lg), `loading`, `fullWidth` — always shows `cursor-pointer` on hover. All variants have colored hover shadows for depth.
 - **Badge**: `variant` (success/warning/danger/neutral), `label` prop (NOT children)
 - **Modal**: `open`, `onClose`, `title`, `size` (sm/md/lg)
 - **DataTable**: `columns`, `data`, `onRowClick`, `emptyMessage`, optional: `selectable`, `selectedIds` (Set<string>), `onSelectionChange`
 - **Input/Select/Textarea**: `label`, `error`, `required`, forwarded ref
 - **Select**: `options` array of `{value, label}`, `placeholder`
-- **Card**: `padding` (sm/md/lg), `interactive` (visual hover effects only, no cursor change)
+- **Card**: `variant` (solid/glass-light/glass-medium/glass-heavy), `padding` (sm/md/lg), `interactive` (visual hover effects only, no cursor change), `shimmer` (optional loading state)
 
 ## Commands
 ```bash
@@ -135,3 +142,9 @@ npm run preview  # Preview production build
 - **AdminLayout**: "Return to HIS Site" link is at bottom of left sidebar (NOT in top header) — uses flexbox layout with footer section
 - **Card interactive prop**: Only adds visual hover effects (shadow, translate, border) — does NOT change cursor to pointer
 - **Button cursor**: All buttons explicitly show `cursor-pointer` on hover for consistent UX across browsers
+- **Spacing discipline**: All public pages follow base-8 grid. NO arbitrary spacing values (mb-3, py-19, etc.)
+- **Glassmorphism variants**: `glass-light` is subtle (0.7 opacity), `glass-medium` is balanced, `glass-heavy` is prominent with heavy blur. Semantic naming prevents confusion.
+- **Accessibility**: Skip-to-content link present, focus-visible states on all interactive elements (WCAG 2.1 SC 2.4.1, 2.4.7 compliant)
+- **Button shadows**: All variants use colored shadows on hover (lg for primary/secondary/danger, md for ghost/outline) for visual consistency
+- **Hero CTA hierarchy**: Primary button uses `size="lg"` with explicit price, secondary uses `size="md"` with `variant="ghost"` for clear visual dominance
+- **Footer design**: py-12 padding, text-2xl org name, separate email from address, visual divider before copyright for proper hierarchy

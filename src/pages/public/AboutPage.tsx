@@ -65,7 +65,7 @@ export default function AboutPage() {
       />
 
       {/* Mission Statement */}
-      <section className="py-16 md:py-20 px-6">
+      <section className="py-16 md:py-24 px-6">
         <blockquote className="max-w-3xl mx-auto text-center">
           <p className="font-display text-2xl md:text-3xl text-text-high leading-relaxed">
             "Our mission is to facilitate the work of God in Asia by investing
@@ -77,7 +77,7 @@ export default function AboutPage() {
       </section>
 
       {/* Our Story */}
-      <section className="bg-accent-soft py-16 md:py-20">
+      <section className="bg-accent-soft py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="font-display text-3xl text-text-high mb-4">
@@ -114,7 +114,7 @@ export default function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="font-display text-3xl text-text-high text-center mb-10">
             What We Believe
@@ -158,7 +158,7 @@ export default function AboutPage() {
       </section>
 
       {/* Ways to Support */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="font-display text-3xl text-text-high text-center mb-10">
             Ways to Support

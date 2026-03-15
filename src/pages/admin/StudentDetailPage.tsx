@@ -285,7 +285,7 @@ export default function StudentDetailPage() {
               <X className="h-4 w-4 mr-2" />
               Cancel
             </Button>
-            <Button onClick={handleSave} loading={saving}>
+            <Button variant="glass-primary" onClick={handleSave} loading={saving}>
               <Save className="h-4 w-4 mr-2" />
               Save
             </Button>
@@ -320,7 +320,7 @@ export default function StudentDetailPage() {
             <div className="flex flex-col sm:flex-row gap-6">
               {/* Current Photo Preview */}
               <div className="flex-shrink-0">
-                <div className="w-64 h-64 rounded-lg overflow-hidden bg-surface-alt border-2 border-secondary/20 flex items-center justify-center shadow-lg">
+                <div className="w-64 h-64 rounded-xl overflow-hidden bg-neutral-100 border-2 border-primary/20 flex items-center justify-center shadow-xl">
                   {form.photo_url || student?.photo_url ? (
                     <img
                       src={form.photo_url || student?.photo_url || ''}
@@ -328,7 +328,7 @@ export default function StudentDetailPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <User className="h-32 w-32 text-text-muted" />
+                    <User className="h-32 w-32 text-neutral-400" />
                   )}
                 </div>
               </div>
@@ -427,7 +427,7 @@ export default function StudentDetailPage() {
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Photo Display */}
             <div className="flex-shrink-0">
-              <div className="w-80 h-80 rounded-lg overflow-hidden bg-surface-alt border-2 border-secondary/20 flex items-center justify-center shadow-lg">
+              <div className="w-80 h-80 rounded-2xl overflow-hidden bg-neutral-100 border-2 border-primary/20 flex items-center justify-center shadow-2xl">
                 {student.photo_url ? (
                   <img
                     src={student.photo_url}
@@ -435,7 +435,7 @@ export default function StudentDetailPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <User className="h-40 w-40 text-text-muted" />
+                  <User className="h-40 w-40 text-neutral-400" />
                 )}
               </div>
             </div>

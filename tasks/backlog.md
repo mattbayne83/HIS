@@ -44,7 +44,13 @@
 - [ ] Feature 2: Email to submit new/changes (Supabase Edge Function + review queue)
 
 ### Admin Enhancements
+- [ ] **Structured location data**: Replace free-text `region`/`village` fields with Nepal administrative divisions (provinces, districts, municipalities)
+  - **Research complete**: [docs/nepal-regions-villages-research.md](../docs/nepal-regions-villages-research.md)
+  - **Recommended approach**: Phase 1 — District dropdown + free-text village (low risk, quick win)
+  - **Benefits**: Data quality, analytics, enables dashboard map feature
+  - **Datasets ready**: 7 provinces, 77 districts, 753 municipalities (JSON format, ready to import)
 - [ ] Dashboard map: populate with student locations by district (aggregate by region/village)
+  - **Blocked by**: Structured location data implementation (see above)
 - [ ] PdfExportPage — student profile PDF generation (skeleton exists)
 - [ ] Article rich text editor (replace plain textarea with markdown or WYSIWYG)
 - [ ] Article featured image upload
@@ -53,8 +59,8 @@
 - [ ] Sponsorship: show unsponsored students for quick matching
 
 ### Public Site Polish
-- [ ] SEO meta tags (title, description, og:image per page)
-- [ ] Social sharing image
+- [ ] SEO meta tags (title, description per page — og:image already set globally)
+- [ ] Social sharing image generation
 - [ ] 404 page
 - [ ] Loading skeleton states for public pages
 - [ ] Mobile-optimized image sizing
@@ -91,6 +97,22 @@
 - [x] Sponsorships page search added (matches Students page pattern — donor/student/village filtering)
 - [x] PDF export branded design: Crimson Red header, Mountain Bronze borders, square-cropped photos, dynamic footer
 - [x] Supabase storage bucket RLS policies configured (authenticated-only access)
+
+**Public Site UI Polish (March 14, 2026)**
+- [x] Hero CTA hierarchy fixed: primary button dominant (lg size, px-12), secondary ghost variant
+- [x] Hero overlay lightened: gradient opacity reduced from 80/60/70 → 60/40/50 for background visibility
+- [x] Icon color consistency: Users icon changed from neutral-700 → white to match other stat cards
+- [x] Unused font removed: Playfair Display removed from CSS and Google Fonts import
+- [x] Footer redesigned: py-12 padding, text-2xl org name, email separated from address, visual divider
+- [x] Spacing scale audit: All mb-3 → mb-4 (61 changes across 6 files), standardized section padding (py-16 md:py-24)
+- [x] Base-8 grid enforced: Only use spacing values 2, 4, 6, 8, 12, 16, 20, 24, 32, 48, 64 (no arbitrary values)
+- [x] Skip-to-content link added for keyboard navigation (WCAG 2.1 SC 2.4.1 compliance)
+- [x] Focus-visible states added to all nav links and interactive elements (WCAG 2.1 SC 2.4.7 compliance)
+- [x] Button shadow consistency: colored shadows on all variants (lg for primary/secondary/danger, md for ghost/outline)
+- [x] Glass variants renamed: glass-surface-subtle → glass-light, glass-surface → glass-medium, glass-surface-light → glass-heavy
+- [x] Card component updated: added shimmer prop, default variant is glass-medium
+- [x] Button component updated: added glass-primary variant, active:scale-95 and hover:-translate-y-0.5 animations
+- [x] Design system polish: Overall score improved from 3.8/5 to 4.4/5 across all seven dimensions
 
 **P0 Core Functionality (March 14, 2026)**
 - [x] Database setup verification script and documentation

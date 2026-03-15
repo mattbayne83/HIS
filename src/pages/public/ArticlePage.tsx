@@ -15,7 +15,7 @@ export default function ArticlePage() {
 
   if (loading) {
     return (
-      <div className="py-20">
+      <div className="py-16 md:py-24">
         <LoadingSpinner />
       </div>
     )
@@ -23,7 +23,7 @@ export default function ArticlePage() {
 
   if (error || !article) {
     return (
-      <div className="max-w-3xl mx-auto px-6 py-20 text-center">
+      <div className="max-w-3xl mx-auto px-6 py-16 md:py-24 text-center">
         <h1 className="font-display text-3xl text-text-high mb-4">
           Article Not Found
         </h1>

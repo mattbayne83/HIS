@@ -4,16 +4,18 @@ export interface CardProps {
   children: React.ReactNode;
   className?: string;
   padding?: 'none' | 'sm' | 'md' | 'lg';
-  variant?: 'solid' | 'glass' | 'glass-light';
+  variant?: 'solid' | 'glass-light' | 'glass-medium' | 'glass-heavy';
   interactive?: boolean;
+  shimmer?: boolean;
 }
 
 const Card: React.FC<CardProps> = ({
   children,
   className = '',
   padding = 'md',
-  variant = 'solid',
+  variant = 'glass-medium',
   interactive = false,
+  shimmer = false,
 }) => {
   const paddingClasses = {
     none: 'p-0',
@@ -24,17 +26,20 @@ const Card: React.FC<CardProps> = ({
 
   const variantClasses = {
     solid: 'bg-card border border-neutral-200 shadow-lg',
-    glass: 'glass-surface',
-    'glass-light': 'glass-surface-light',
+    'glass-light': 'glass-light',
+    'glass-medium': 'glass-medium',
+    'glass-heavy': 'glass-heavy',
   };
 
   const interactiveClasses = interactive
     ? 'hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300'
     : 'transition-shadow duration-250';
 
+  const shimmerClass = shimmer ? 'relative overflow-hidden shimmer-effect' : '';
+
   return (
     <div
-      className={`rounded-2xl ${variantClasses[variant]} ${paddingClasses[padding]} ${interactiveClasses} ${className}`}
+      className={`rounded-2xl ${variantClasses[variant]} ${paddingClasses[padding]} ${interactiveClasses} ${shimmerClass} ${className}`}
     >
       {children}
     </div>
