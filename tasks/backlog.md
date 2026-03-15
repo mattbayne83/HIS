@@ -1,23 +1,31 @@
 # HIS Backlog
 
-## P0 — Must Have (Core Functionality)
+## P0 — Must Have (Core Functionality) ✅ COMPLETE (March 14, 2026)
 
-### Database Setup
-- [ ] Run SQL migrations in Supabase SQL Editor
-- [ ] Create admin user and set profile role
-- [ ] Create `images` storage bucket in Supabase dashboard
-- [ ] Verify end-to-end: login → dashboard → CRUD operations
+### Database Setup ✅
+- [x] Run SQL migrations in Supabase SQL Editor
+- [x] Create admin user and set profile role
+- [x] Create `images` storage bucket in Supabase dashboard
+- [x] Verify end-to-end: login → dashboard → CRUD operations
+- [x] Created verification script (`scripts/verify-setup.js`)
+- [x] Created setup documentation (`docs/SETUP.md`)
 
-### Admin — Donations
-- [ ] Donations CRUD page (list, record new, edit, delete)
-- [ ] Donation query functions in `queries.ts`
-- [ ] Wire into admin router + sidebar nav
+### Admin — Donations ✅
+- [x] Donations CRUD page (list, record new, edit, delete)
+- [x] Donation query functions in `queries.ts`
+- [x] Wire into admin router + sidebar nav
+- [x] Currency formatting (USD with proper cents conversion)
+- [x] Donor dropdown selection
 
-### Auth & Security
-- [ ] Password reset flow (Supabase built-in)
+### Auth & Security ✅
+- [x] Password reset flow (Supabase built-in)
+- [x] Reset password request page (`/reset-password`)
+- [x] Reset password confirmation page (`/reset-password/confirm`)
+- [x] Added auth helper functions (`resetPasswordForEmail`, `updatePassword`)
+- [x] Added "Forgot password?" link to login page
 
-### Error Handling
-- [ ] Wire ErrorBoundary into router (component exists, not integrated)
+### Error Handling ✅
+- [x] Wire ErrorBoundary into router (wraps entire app in `main.tsx`)
 
 ## P1 — Should Have (Polish & Usability)
 
@@ -25,17 +33,18 @@
 **See detailed plan**: [tasks/vss-features-plan.md](vss-features-plan.md)
 **Schema implementation**: ✅ [Complete](phase1-implementation-complete.md) (March 14, 2026)
 
-**Phase 1: Foundation (Week 1-2)**
-- [ ] Feature 1: Bulk upload of photos and child information (CSV/Excel + photo batch)
-- [ ] Feature 3: Duplicate detection and merge logic (fuzzy matching + merge UI)
+**Phase 1: Foundation (Week 1-2)** — ✅ Complete
+- [x] Feature 1: Bulk upload of photos and child information (CSV/Excel + photo batch)
+- [x] Feature 3: Duplicate detection and merge logic (fuzzy matching + merge UI)
 
-**Phase 2: Power Tools (Week 3)**
-- [ ] Feature 4: Bulk select and export (CSV, PDF, photo ZIP)
+**Phase 2: Power Tools (Week 3)** — ✅ Complete (March 14, 2026)
+- [x] Feature 4: Bulk select and export (CSV, PDF, photo ZIP)
 
 **Phase 3: Field Integration (Week 4-5)**
 - [ ] Feature 2: Email to submit new/changes (Supabase Edge Function + review queue)
 
 ### Admin Enhancements
+- [ ] Dashboard map: populate with student locations by district (aggregate by region/village)
 - [ ] PdfExportPage — student profile PDF generation (skeleton exists)
 - [ ] Article rich text editor (replace plain textarea with markdown or WYSIWYG)
 - [ ] Article featured image upload
@@ -72,6 +81,33 @@
 - [ ] Image optimization (WebP conversion, thumbnails)
 
 ## Completed
+
+**UI/UX Improvements (March 14, 2026)**
+- [x] Typography hierarchy upgrade: h1 text-4xl bold, h2 text-2xl semibold across all admin pages
+- [x] Dashboard stat cards made clickable with navigation to respective sections
+- [x] Dashboard map component placeholder added (awaiting district data)
+- [x] Admin sidebar menu reordered to match dashboard card sequence
+- [x] Student detail page photo enlarged to 320px (w-80) on view, 256px (w-64) on edit form
+- [x] Sponsorships page search added (matches Students page pattern — donor/student/village filtering)
+- [x] PDF export branded design: Crimson Red header, Mountain Bronze borders, square-cropped photos, dynamic footer
+- [x] Supabase storage bucket RLS policies configured (authenticated-only access)
+
+**P0 Core Functionality (March 14, 2026)**
+- [x] Database setup verification script and documentation
+- [x] ErrorBoundary integrated into router for global error catching
+- [x] Password reset flow (request + confirm pages, auth helpers)
+- [x] Donations CRUD page with currency formatting and donor selection
+- [x] All P0 features tested and verified
+- [x] ESLint passing with zero warnings
+
+**VSS Field Data Management (March 2026)**
+- [x] Feature 1: Bulk CSV/photo upload with compression and validation
+- [x] Feature 3: Duplicate detection (fuzzy matching) + merge workflow with audit trail
+- [x] Feature 4: Bulk select + export (CSV, PDF profile cards, photo ZIP)
+- [x] DataTable multi-select with Set-based tracking
+- [x] BulkActionsToolbar (floating glass morphism toolbar)
+- [x] Export utilities (papaparse, jspdf, jszip)
+- [x] Fuzzy matching utilities (Levenshtein distance, ranking)
 
 **Deployment & GitHub Pages (March 2026)**
 - [x] GitHub Actions workflow for auto-deployment

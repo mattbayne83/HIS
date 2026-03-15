@@ -61,7 +61,8 @@ Auto-created via trigger `on_auth_user_created` → `handle_new_user()`.
 | region | text | Required |
 | coordinator | text | |
 | photo_url | text | Nullable |
-| status | text | `active` / `inactive` / `graduated` |
+| status | text | `active` / `inactive` / `graduated` / `merged` |
+| merged_into_id | uuid (FK) | References students(id), nullable. Points to student this record was merged into. |
 | notes | text | Nullable |
 | created_at, updated_at | timestamptz | Auto-managed |
 
@@ -192,9 +193,19 @@ Helper function: `is_admin()` checks if current user's profile role = `admin`.
 | Card | padding (sm/md/lg) | Surface bg, rounded border |
 | Modal | open, onClose, title, size | Backdrop + escape key |
 | Badge | variant, **label** | Uses `label` prop, NOT children |
-| DataTable | columns, data, onRowClick, emptyMessage | Generic, sortable |
+| DataTable | columns, data, onRowClick, emptyMessage, selectable, selectedIds, onSelectionChange | Generic, sortable, optional multi-select |
 | LoadingSpinner | size (sm/md/lg) | Centered Loader2 animation |
 | Pagination | (available but unused) | |
+
+### Student-Specific Components (`components/students/`)
+| Component | File | Purpose |
+|-----------|------|---------|
+| DuplicateWarningCard | DuplicateWarningCard.tsx | Inline warning when duplicates detected |
+| MergeStudentsModal | MergeStudentsModal.tsx | Two-column merge UI with field selection |
+| MergeHistoryCard | MergeHistoryCard.tsx | Audit trail of merge operations |
+| BulkActionsToolbar | BulkActionsToolbar.tsx | Floating toolbar for bulk select/export/delete |
+| ExportProgressModal | ExportProgressModal.tsx | Progress bar for photo ZIP exports |
+| BulkDeleteConfirmModal | BulkDeleteConfirmModal.tsx | Two-step confirmation for bulk delete |
 
 ### Hooks
 | Hook | Signature | Purpose |
@@ -208,6 +219,14 @@ Helper function: `is_admin()` checks if current user's profile role = `admin`.
 | formatDate | utils/format.ts | ISO → "March 13, 2026" |
 | formatDateShort | utils/format.ts | ISO → "Mar 13, 2026" |
 | slugify | utils/slug.ts | "Hello World" → "hello-world" |
+| exportStudentsToCSV | utils/exportUtils.ts | Export students to CSV (papaparse) |
+| exportStudentsToPDF | utils/exportUtils.ts | Generate branded PDF profile cards (jspdf). Crimson Red header, square-cropped photos via canvas, dynamic footer. |
+| exportStudentPhotos | utils/exportUtils.ts | Bundle photos into ZIP (jszip) with progress callback |
+| downloadBlob | utils/exportUtils.ts | Browser download helper |
+| cropImageToSquare | utils/exportUtils.ts | Canvas-based image cropping (object-fit: cover) |
+| levenshteinDistance | utils/fuzzyMatch.ts | Edit distance algorithm |
+| calculateMatchScore | utils/fuzzyMatch.ts | 0-100 similarity score |
+| rankDuplicates | utils/fuzzyMatch.ts | Filter & sort duplicate candidates |
 
 ## Query Functions (`lib/queries.ts`)
 
@@ -217,6 +236,10 @@ Helper function: `is_admin()` checks if current user's profile role = `admin`.
 - `createStudent(data)` — insert
 - `updateStudent(id, updates)` — partial update
 - `deleteStudent(id)` — delete
+- `bulkCreateStudents(data[])` — batch insert from CSV import
+- `findPotentialDuplicates(name, village, region, age, excludeId?)` — Returns full Student[] objects (fetches complete records after DB function call) for fuzzy matching
+- `mergeStudents(keptId, mergedId, selections, updates, mergedBy)` — Combine two student records. Selections type: `Record<string, 'A' | 'B' | 'combine'>` (combine used for notes merging)
+- `getStudentMergeLog(studentId)` — audit trail of merge operations
 
 ### Donors
 - `getDonors()` — list all

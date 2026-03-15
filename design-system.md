@@ -1,4 +1,4 @@
-# Design System — HIS (Himalayan Indigenous Services)
+# Design System — HIS (Himali Indigenous Services)
 
 Generated: 2026-03-14
 Mood: **Premium glassmorphism with Nepal flag crimson red** — frosted glass surfaces, depth through blur and transparency, sophisticated red palette inspired by Nepal's national flag, elegant shadows, and a sense of cultural dignity.
@@ -70,7 +70,7 @@ Mood: **Premium glassmorphism with Nepal flag crimson red** — frosted glass su
 | Glass Shadow Heavy | `0 12px 48px rgba(31,24,18,0.15)` | `--glass-shadow-heavy` | Modal/overlay depth |
 
 ### Palette Rationale
-This palette uses **analogous color harmony** anchored by crimson red (`#DC143C`). The **mountain bronze** (`#A67C52`) secondary palette sits adjacent to red on the color wheel, creating a warm, earthy flow that evokes the Himalayan landscape — terraced hillsides, mountain soil, golden hour light on peaks. This analogous relationship (red → orange → brown) feels natural and cohesive, avoiding harsh contrast while maintaining visual interest through value and saturation shifts. **Warm sand** (`#D4C5B0`) continues the earth-tone theme. The result: a palette that feels grounded in Nepal's geography while balancing urgency (crimson) with warmth and stability (bronze/sand).
+This palette uses **analogous color harmony** anchored by crimson red (`#DC143C`). The **mountain bronze** (`#A67C52`) secondary palette sits adjacent to red on the color wheel, creating a warm, earthy flow that evokes the Himali landscape — terraced hillsides, mountain soil, golden hour light on peaks. This analogous relationship (red → orange → brown) feels natural and cohesive, avoiding harsh contrast while maintaining visual interest through value and saturation shifts. **Warm sand** (`#D4C5B0`) continues the earth-tone theme. The result: a palette that feels grounded in Nepal's geography while balancing urgency (crimson) with warmth and stability (bronze/sand).
 
 ### Accessibility Notes
 - **Primary crimson on white**: 5.2:1 — **WCAG AA** for large text, AAA for decorative

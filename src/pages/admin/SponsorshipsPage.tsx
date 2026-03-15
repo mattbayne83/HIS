@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, Search } from 'lucide-react'
 import {
   Button,
   Select,
@@ -31,6 +31,7 @@ const STATUS_OPTIONS = [
 
 export default function SponsorshipsPage() {
   const [statusFilter, setStatusFilter] = useState<string>('')
+  const [search, setSearch] = useState('')
   const [createOpen, setCreateOpen] = useState(false)
   const [endConfirm, setEndConfirm] = useState<Sponsorship | null>(null)
   const [saving, setSaving] = useState(false)
@@ -57,6 +58,20 @@ export default function SponsorshipsPage() {
 
   const { data: students } = useQuery(() => getStudents('active'))
   const { data: donors } = useQuery(getDonors)
+
+  const filtered = (sponsorships ?? []).filter((s) =>
+    search
+      ? (s.donor as { name: string } | undefined)?.name
+          ?.toLowerCase()
+          .includes(search.toLowerCase()) ||
+        (s.student as { name: string; village: string } | undefined)?.name
+          ?.toLowerCase()
+          .includes(search.toLowerCase()) ||
+        (s.student as { name: string; village: string } | undefined)?.village
+          ?.toLowerCase()
+          .includes(search.toLowerCase())
+      : true
+  )
 
   const columns: DataTableColumn<Sponsorship>[] = [
     {
@@ -165,7 +180,7 @@ export default function SponsorshipsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-2xl font-display font-semibold text-text-high">
+        <h1 className="text-4xl font-display font-bold text-text-high">
           Sponsorships
         </h1>
         <Button onClick={() => setCreateOpen(true)}>
@@ -180,17 +195,31 @@ export default function SponsorshipsPage() {
         </Card>
       )}
 
-      <div className="sm:w-48">
-        <Select
-          options={STATUS_OPTIONS}
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        />
+      {/* Filters */}
+      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+        <div className="relative flex-1 sm:min-w-[500px]">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
+          <input
+            type="text"
+            placeholder="Search by donor, student, or village..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full h-[42px] pl-10 pr-3 py-2 rounded-lg border border-border bg-white text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+          />
+        </div>
+        <div className="sm:w-56">
+          <Select
+            options={STATUS_OPTIONS}
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="h-[42px]"
+          />
+        </div>
       </div>
 
       <DataTable
         columns={columns}
-        data={sponsorships ?? []}
+        data={filtered}
         emptyMessage="No sponsorships found"
       />
 

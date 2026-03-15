@@ -160,7 +160,7 @@ export default function DonorsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-2xl font-display font-semibold text-text-high">
+        <h1 className="text-4xl font-display font-bold text-text-high">
           Donors
         </h1>
         <Button onClick={openCreate}>

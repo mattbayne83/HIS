@@ -4,9 +4,6 @@ import {
   GraduationCap,
   Heart,
   Link2,
-  FileText,
-  Building2,
-  Printer,
   Menu,
   X,
   LogOut,
@@ -25,11 +22,9 @@ export function AdminLayout() {
   const navLinks = [
     { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
     { to: '/admin/students', label: 'Students', icon: GraduationCap },
-    { to: '/admin/donors', label: 'Donors', icon: Heart },
     { to: '/admin/sponsorships', label: 'Sponsorships', icon: Link2 },
-    { to: '/admin/articles', label: 'Articles', icon: FileText },
-    { to: '/admin/ministries', label: 'Ministries', icon: Building2 },
-    { to: '/admin/pdf', label: 'PDF Export', icon: Printer },
+    { to: '/admin/donors', label: 'Donors', icon: Heart },
+    // Hidden for now: Donations, Articles, Ministries (routes still exist, just not in nav)
   ]
 
   const handleLogout = async () => {
@@ -51,17 +46,17 @@ export function AdminLayout() {
         }`}
       >
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
-          <h1 className="font-display text-xl font-semibold">HIS Admin</h1>
+          <h1 className="font-display text-2xl font-semibold">HIS Admin</h1>
           <button
             onClick={toggleSidebar}
-            className="lg:hidden p-2 rounded-md hover:bg-primary-light transition-colors"
+            className="lg:hidden p-2 rounded-xl hover:bg-white/10 transition-all duration-200"
             aria-label="Close sidebar"
           >
             <X size={20} />
           </button>
         </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
+        <nav className="flex-1 px-3 py-4 space-y-2">
           {navLinks.map(({ to, label, icon: Icon }) => {
             const isActive = location.pathname === to
             return (
@@ -73,14 +68,14 @@ export function AdminLayout() {
                     toggleSidebar()
                   }
                 }}
-                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-primary-light text-secondary'
-                    : 'text-white/90 hover:bg-primary-light hover:text-white'
+                    ? 'bg-white text-primary shadow-lg'
+                    : 'text-white/90 hover:bg-white/10 hover:text-white hover:shadow-md'
                 }`}
               >
-                <Icon size={18} />
-                <span>{label}</span>
+                <Icon size={20} />
+                <span className="text-base">{label}</span>
               </NavLink>
             )
           })}
@@ -102,7 +97,7 @@ export function AdminLayout() {
         <header className="sticky top-0 z-30 h-16 bg-surface border-b border-border flex items-center justify-between px-4 sm:px-6">
           <button
             onClick={toggleSidebar}
-            className="lg:hidden p-2 rounded-md hover:bg-surface-alt transition-colors"
+            className="lg:hidden p-2.5 rounded-xl hover:bg-surface border border-border transition-all duration-200 shadow-sm hover:shadow-md"
             aria-label="Open sidebar"
           >
             <Menu size={20} className="text-text-high" />
@@ -114,9 +109,9 @@ export function AdminLayout() {
             </span>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-text-high hover:bg-surface-alt transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium text-text-high bg-white border border-border hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 shadow-sm hover:shadow-md"
             >
-              <LogOut size={16} />
+              <LogOut size={18} />
               <span>Logout</span>
             </button>
           </div>

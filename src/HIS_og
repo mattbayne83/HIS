@@ -1,0 +1,169 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": 0,
+      "y": 0,
+      "name": "Frame",
+      "clip": true,
+      "width": 800,
+      "height": 600,
+      "fill": "#FFFFFF",
+      "layout": "none"
+    },
+    {
+      "type": "frame",
+      "id": "1ErN3",
+      "x": 100,
+      "y": 100,
+      "name": "HIS OG Image",
+      "width": 1200,
+      "height": 630,
+      "fill": {
+        "type": "gradient",
+        "gradientType": "linear",
+        "enabled": true,
+        "rotation": 135,
+        "size": {
+          "height": 1
+        },
+        "colors": [
+          {
+            "color": "#F5F1EB",
+            "position": 0
+          },
+          {
+            "color": "#E8DFD5",
+            "position": 1
+          }
+        ]
+      },
+      "children": [
+        {
+          "type": "frame",
+          "id": "PMsix",
+          "name": "decorLayer",
+          "width": 1200,
+          "height": 630,
+          "layout": "none",
+          "children": [
+            {
+              "type": "polygon",
+              "polygonCount": 3,
+              "id": "h4vo9",
+              "x": 800,
+              "y": 350,
+              "name": "mountain1",
+              "opacity": 0.3,
+              "fill": "#D4C5B0",
+              "width": 400,
+              "height": 280
+            },
+            {
+              "type": "polygon",
+              "polygonCount": 3,
+              "id": "O0mq7",
+              "x": 650,
+              "y": 400,
+              "name": "mountain2",
+              "opacity": 0.2,
+              "fill": "#A67C52",
+              "width": 350,
+              "height": 230
+            },
+            {
+              "type": "polygon",
+              "polygonCount": 3,
+              "id": "32zDE",
+              "x": 900,
+              "y": 420,
+              "name": "mountain3",
+              "opacity": 0.25,
+              "fill": "#A67C52",
+              "width": 300,
+              "height": 210
+            },
+            {
+              "type": "ellipse",
+              "id": "TYpwR",
+              "x": 50,
+              "y": 450,
+              "name": "accentCircle",
+              "opacity": 0.08,
+              "fill": "#DC143C",
+              "width": 200,
+              "height": 200
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "O5WAm",
+          "name": "contentArea",
+          "width": 1200,
+          "height": 630,
+          "layout": "vertical",
+          "gap": 24,
+          "padding": [
+            60,
+            80
+          ],
+          "justifyContent": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "6kTSy",
+              "name": "titleText",
+              "fill": "#DC143C",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Himali Indigenous Services",
+              "lineHeight": 1.1,
+              "fontFamily": "Inter",
+              "fontSize": 72,
+              "fontWeight": "700"
+            },
+            {
+              "type": "text",
+              "id": "xhtOe",
+              "name": "taglineText",
+              "fill": "#4A3F36",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Facilitating transformation in Nepal through local partnerships",
+              "lineHeight": 1.3,
+              "fontFamily": "Inter",
+              "fontSize": 32
+            },
+            {
+              "type": "frame",
+              "id": "DBjcb",
+              "name": "badge",
+              "fill": "#DC143C",
+              "cornerRadius": 8,
+              "gap": 8,
+              "padding": [
+                12,
+                24
+              ],
+              "children": [
+                {
+                  "type": "text",
+                  "id": "JsRk8",
+                  "name": "badgeText",
+                  "fill": "#FFFFFF",
+                  "content": "501(c)(3) Non-Profit",
+                  "fontFamily": "Inter",
+                  "fontSize": 24,
+                  "fontWeight": "600"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -37,7 +37,7 @@ const WAYS_TO_GIVE = [
   {
     icon: GraduationCap,
     title: 'Sponsor a Student',
-    detail: '$150/year covers tuition, uniforms, supplies, and meals for one child.',
+    detail: '$150/year covers tuition, uniforms, and supplies for one child.',
   },
   {
     icon: Heart,
@@ -85,7 +85,7 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-text-muted text-base leading-relaxed">
               <p>
-                Himalayan Indigenous Services was founded in 2018 as a 501(c)(3)
+                Himali Indigenous Services was founded in 2018 as a 501(c)(3)
                 non-profit based in Cookeville, Tennessee. What began as a deep
                 connection with the people of Nepal has grown into a network of
                 programs reaching hundreds of lives each year.

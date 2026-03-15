@@ -6,6 +6,7 @@ import './styles/leaflet.css'
 import { router } from './router'
 import { supabase } from './lib/supabase'
 import { useAppStore } from './store/useAppStore'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 // Listen for auth state changes and sync to Zustand
 supabase.auth.onAuthStateChange((_event, session) => {
@@ -14,6 +15,8 @@ supabase.auth.onAuthStateChange((_event, session) => {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
   </StrictMode>,
 )

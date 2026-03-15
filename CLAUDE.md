@@ -1,7 +1,7 @@
-# HIS — Himalayan Indigenous Services
+# HIS — Himali Indigenous Services
 
 ## What This Is
-Web application for Himalayan Indigenous Services, a US-based 501(c)(3) non-profit
+Web application for Himali Indigenous Services, a US-based 501(c)(3) non-profit
 focused on facilitating transformation in Nepal through local partnerships.
 Managed by Bob Bayne. Existing site: https://www.his-serve.org/
 
@@ -12,6 +12,7 @@ Managed by Bob Bayne. Existing site: https://www.his-serve.org/
 - **Backend**: Supabase (Postgres DB, Auth, Storage)
 - **Routing**: React Router 7 (BrowserRouter)
 - **Fonts**: Inter (body `font-sans`), DM Serif Display (headings `font-display`)
+- **Export**: papaparse (CSV), jspdf (PDF), jszip (ZIP)
 
 ## Architecture
 
@@ -61,22 +62,32 @@ Each admin CRUD page follows this structure:
 - All tokens in `@theme` block in `src/index.css`
 - Use semantic classes: `bg-primary`, `text-secondary`, `border-border`, etc.
 
+### Typography Hierarchy
+- **Page Title (h1)**: `text-4xl font-display font-bold` (36px, bold) — Admin page titles
+- **Section Heading (h2)**: `text-2xl font-display font-semibold` (24px, semibold) — Major sections
+- **Subsection (h3)**: `text-xl font-display font-medium` (20px, medium) — Subsections
+- **Card Header**: `text-base font-sans font-semibold` (16px, semibold) — Component headers
+- **Fonts**: Cormorant Garamond (display), Inter (body)
+
 ## Key Files
 - `src/router.tsx` — Route definitions
 - `src/main.tsx` — App entry + auth listener
-- `src/lib/queries.ts` — All Supabase CRUD operations
+- `src/lib/queries.ts` — All Supabase CRUD operations (includes findPotentialDuplicates, mergeStudents)
 - `src/hooks/useQuery.ts` — Generic data fetching hook
 - `src/store/useAppStore.ts` — Global Zustand store
 - `src/types/database.ts` — TS types matching DB schema
 - `src/index.css` — Design tokens
 - `src/utils/format.ts` — formatCents, formatDate, formatDateShort
 - `src/utils/slug.ts` — slugify
+- `src/utils/exportUtils.ts` — CSV/PDF/ZIP export (papaparse, jspdf, jszip), branded student profile PDFs
+- `src/utils/fuzzyMatch.ts` — Levenshtein distance, duplicate detection, rankDuplicates()
+- `src/components/students/` — DuplicateWarningCard, MergeStudentsModal, MergeHistoryCard
 
 ## UI Component API
 - **Button**: `variant` (primary/secondary/danger), `size` (sm/md/lg), `loading`, `fullWidth`
 - **Badge**: `variant` (success/warning/danger/neutral), `label` prop (NOT children)
 - **Modal**: `open`, `onClose`, `title`, `size` (sm/md/lg)
-- **DataTable**: `columns`, `data`, `onRowClick`, `emptyMessage`
+- **DataTable**: `columns`, `data`, `onRowClick`, `emptyMessage`, optional: `selectable`, `selectedIds` (Set<string>), `onSelectionChange`
 - **Input/Select/Textarea**: `label`, `error`, `required`, forwarded ref
 - **Select**: `options` array of `{value, label}`, `placeholder`
 - **Card**: `padding` (sm/md/lg)
@@ -104,6 +115,8 @@ npm run preview  # Preview production build
 - Image storage bucket `images` — must be created in Supabase dashboard
 - Admin pages must export `{ XPage as Component }` for react-router lazy loading
 - DataTable generic uses `Record<string, any>` — TS interfaces satisfy this
+- **DataTable selection requires `id` field** — uses `Set<string>` for tracking, row key is `row.id`
+- **DataTable onRowClick works WITH selectable** — checkbox click uses `stopPropagation()` to prevent row click
 - Badge uses `label` prop, NOT children
 - Article body stored as JSONB `{ text: string }` — plain text for now
 - **HomePage does NOT fetch student data** — uses empty locations array for map (security/privacy)
@@ -111,3 +124,11 @@ npm run preview  # Preview production build
 - SQL migrations must be run manually in Supabase SQL Editor
 - After creating a user, manually set `role = 'admin'` in profiles table
 - **GitHub Pages deployment**: basename configured in router, base path in vite.config.ts
+- **Storage bucket security**: `images` bucket uses authenticated-only access — only logged-in users can view/upload photos (privacy protection for student data)
+- **Export utilities**: PDF/ZIP generation happens client-side while admin is authenticated, so photo access works
+- **PDF generation is client-side** — jsPDF creates PDFs in browser, no server needed. Branded layout with HIS colors (Crimson Red header, Mountain Bronze borders, Warm Sand dividers). Photos cropped to square using canvas API (object-fit: cover behavior).
+- **Hidden nav items**: Donations, Articles, Ministries are hidden from sidebar nav but routes still exist and work
+- **Merge functionality**: Selection type is `Record<string, 'A' | 'B' | 'combine'>` — 'combine' is used for notes merging. Must update interface, component state, and query function types together.
+- **findPotentialDuplicates**: Returns full `Student[]` objects (fetches complete records after database function call) to work with rankDuplicates fuzzy matching
+- **Search pattern**: SponsorshipsPage and StudentsPage both use same search pattern — relative div with absolute-positioned Search icon, filters by donor name, student name, and village
+- **Student detail photos**: 320px (w-80) on view page, 256px (w-64) on edit form

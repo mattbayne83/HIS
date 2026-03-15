@@ -13,12 +13,10 @@ import classroomScene from '../../assets/classroom-scene.jpg'
 
 const GIVE_URL = 'https://www.his-serve.org/give'
 
-const IMPACT_BREAKDOWN = [
-  { label: 'School Tuition', amount: 60, description: 'Full year enrollment' },
-  { label: 'School Uniform', amount: 25, description: 'Required for attendance' },
-  { label: 'School Supplies', amount: 20, description: 'Books, pencils, notebooks' },
-  { label: 'Daily Meals', amount: 35, description: 'Nutrition for learning' },
-  { label: 'Program Support', amount: 10, description: 'Administration & oversight' },
+const IMPACT_STATS = [
+  { value: '160+', label: 'Children Sponsored', description: 'Students receiving education support across Nepal' },
+  { value: '$24,000+', label: 'Total Annual Impact', description: 'Direct investment in student education each year' },
+  { value: '25+', label: 'Unique Communities', description: 'Remote villages reached through sponsorships' },
 ]
 
 const PROGRAMS = [
@@ -46,9 +44,7 @@ const PROGRAMS = [
 ]
 
 export default function HomePage() {
-  const [sponsorCount, setSponsorCount] = useState(1)
   const [parallaxOffset, setParallaxOffset] = useState(0)
-  const totalImpact = sponsorCount * 150
 
   useEffect(() => {
     // Parallax scroll effect for hero
@@ -97,10 +93,10 @@ export default function HomePage() {
 
           {/* Subheadline */}
           <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-4 leading-relaxed font-light">
-            One year of education. Tuition, uniforms, supplies, and meals.
+            One year of education. Tuition, uniforms, and supplies.
           </p>
           <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed">
-            For a child in a remote Himalayan village, it's the difference between hope and survival.
+            For a child in a remote Himali village, it's the difference between hope and survival.
           </p>
 
           {/* CTAs */}
@@ -193,73 +189,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Interactive Impact Calculator */}
+      {/* Collective Impact */}
       <section className="py-16 md:py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <h2 className="font-serif text-3xl md:text-4xl text-center text-text-high mb-3">
             See Your Impact
           </h2>
-          <p className="text-center text-text-muted mb-10">
-            Every dollar is carefully allocated to maximize transformation.
+          <p className="text-center text-text-muted mb-12 max-w-2xl mx-auto">
+            Together, we're creating lasting change across Nepal — one student, one community at a time.
           </p>
 
-          {/* Slider */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <label className="text-sm font-semibold text-text-high">Number of Students</label>
-              <div className="text-right">
-                <p className="font-serif text-3xl text-primary">{sponsorCount}</p>
-                <p className="text-xs text-text-muted">student{sponsorCount > 1 ? 's' : ''}</p>
-              </div>
-            </div>
-            <input
-              type="range"
-              min="1"
-              max="10"
-              value={sponsorCount}
-              onChange={(e) => setSponsorCount(Number(e.target.value))}
-              className="w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-primary"
-            />
+          <div className="grid md:grid-cols-3 gap-8 mb-10">
+            {IMPACT_STATS.map((stat) => (
+              <Card key={stat.label} variant="glass" padding="lg">
+                <div className="text-center">
+                  <p className="font-serif text-5xl text-primary mb-2">{stat.value}</p>
+                  <p className="font-semibold text-text-high mb-3 text-lg">{stat.label}</p>
+                  <p className="text-sm text-text-muted leading-relaxed">{stat.description}</p>
+                </div>
+              </Card>
+            ))}
           </div>
 
-          {/* Breakdown Card */}
-          <Card variant="glass" padding="lg">
-            <div className="space-y-4">
-              {/* Total */}
-              <div className="flex items-center justify-between pb-4 border-b border-neutral-200">
-                <span className="font-semibold text-text-high">Your Total Impact</span>
-                <span className="font-serif text-3xl text-primary">${totalImpact}</span>
-              </div>
-
-              {/* Line Items */}
-              {IMPACT_BREAKDOWN.map((item) => {
-                const itemTotal = item.amount * sponsorCount
-                return (
-                  <div key={item.label} className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-text-high">{item.label}</p>
-                      <p className="text-xs text-text-muted">{item.description}</p>
-                    </div>
-                    <div className="text-right ml-4">
-                      <p className="text-sm font-semibold text-secondary">${itemTotal}</p>
-                      {sponsorCount > 1 && (
-                        <p className="text-xs text-text-muted">${item.amount} × {sponsorCount}</p>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-
-              {/* CTA */}
-              <div className="pt-4 border-t border-neutral-200">
-                <a href={GIVE_URL} target="_blank" rel="noopener noreferrer" className="block">
-                  <Button variant="primary" className="w-full">
-                    Sponsor {sponsorCount} Student{sponsorCount > 1 ? 's' : ''} — ${totalImpact}
-                  </Button>
-                </a>
-              </div>
-            </div>
-          </Card>
+          <div className="text-center">
+            <a href={GIVE_URL} target="_blank" rel="noopener noreferrer">
+              <Button size="lg" variant="primary" className="shadow-lg">
+                Sponsor a Student — $150/year
+              </Button>
+            </a>
+            <p className="text-text-muted text-sm mt-4">
+              100% of sponsorships go directly to student support
+            </p>
+          </div>
         </div>
       </section>
 

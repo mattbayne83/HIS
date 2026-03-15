@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { signInWithEmail } from '../../lib/auth';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
@@ -70,6 +70,15 @@ export default function LoginPage() {
             >
               Sign In
             </Button>
+
+            <div className="text-center mt-4">
+              <Link
+                to="/reset-password"
+                className="text-sm text-primary hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
           </form>
         </div>
       </div>

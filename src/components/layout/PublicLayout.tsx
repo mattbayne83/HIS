@@ -22,7 +22,7 @@ export function PublicLayout() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <NavLink to="/" className="font-display text-xl sm:text-2xl font-semibold">
-              Himalayan Indigenous Services
+              Himali Indigenous Services
             </NavLink>
 
             {/* Desktop Nav */}
@@ -105,7 +105,7 @@ export function PublicLayout() {
       {/* Footer */}
       <footer className="bg-primary text-white py-6">
         <div className="max-w-6xl mx-auto px-6 text-center space-y-2">
-          <p className="font-display text-lg">Himalayan Indigenous Services</p>
+          <p className="font-display text-lg">Himali Indigenous Services</p>
           <p className="text-sm text-white/70">
             <a href="mailto:info@his-serve.org" className="hover:text-secondary transition-colors">
               info@his-serve.org
@@ -116,7 +116,7 @@ export function PublicLayout() {
             501(c)(3) Non-Profit
           </p>
           <p className="text-xs text-white/50">
-            &copy; {new Date().getFullYear()} Himalayan Indigenous Services
+            &copy; {new Date().getFullYear()} Himali Indigenous Services
             <span className="mx-2">·</span>
             <Link to="/login" className="hover:text-white/70 transition-colors">Admin</Link>
           </p>

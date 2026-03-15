@@ -3,6 +3,7 @@ import type {
   Student,
   StudentStatus,
   Donor,
+  Donation,
   Sponsorship,
   SponsorshipStatus,
   Article,
@@ -156,6 +157,65 @@ export async function updateSponsorship(
     .single()
   if (error) throw error
   return data as Sponsorship
+}
+
+// ── Donations ──
+
+export async function getDonations() {
+  const { data, error } = await supabase
+    .from('donations')
+    .select('*, donor:donors(name, email)')
+    .order('donation_date', { ascending: false })
+  if (error) throw error
+  return data as Donation[]
+}
+
+export async function getDonation(id: string) {
+  const { data, error } = await supabase
+    .from('donations')
+    .select('*, donor:donors(name, email)')
+    .eq('id', id)
+    .single()
+  if (error) throw error
+  return data as Donation
+}
+
+export async function getDonationsByDonor(donorId: string) {
+  const { data, error } = await supabase
+    .from('donations')
+    .select('*')
+    .eq('donor_id', donorId)
+    .order('donation_date', { ascending: false })
+  if (error) throw error
+  return data as Donation[]
+}
+
+export async function createDonation(
+  donation: Omit<Donation, 'id' | 'created_at' | 'donor'>
+) {
+  const { data, error } = await supabase
+    .from('donations')
+    .insert(donation)
+    .select()
+    .single()
+  if (error) throw error
+  return data as Donation
+}
+
+export async function updateDonation(id: string, updates: Partial<Donation>) {
+  const { data, error } = await supabase
+    .from('donations')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  return data as Donation
+}
+
+export async function deleteDonation(id: string) {
+  const { error } = await supabase.from('donations').delete().eq('id', id)
+  if (error) throw error
 }
 
 // ── Articles ──
@@ -353,7 +413,7 @@ export async function findPotentialDuplicates(
   region: string,
   age: number,
   excludeId?: string
-) {
+): Promise<Student[]> {
   const { data, error } = await supabase.rpc('find_potential_duplicates', {
     p_name: name,
     p_village: village,
@@ -363,7 +423,9 @@ export async function findPotentialDuplicates(
   })
 
   if (error) throw error
-  return data as Array<{
+
+  // Transform the database result to full Student objects
+  const candidates = data as Array<{
     student_id: string
     name: string
     village: string
@@ -372,6 +434,18 @@ export async function findPotentialDuplicates(
     grade: string
     photo_url: string | null
   }>
+
+  // Fetch full student records for the candidate IDs
+  const studentIds = candidates.map((c) => c.student_id)
+  if (studentIds.length === 0) return []
+
+  const { data: students, error: studentsError } = await supabase
+    .from('students')
+    .select('*')
+    .in('id', studentIds)
+
+  if (studentsError) throw studentsError
+  return students as Student[]
 }
 
 /**
@@ -384,7 +458,7 @@ export async function findPotentialDuplicates(
 export async function mergeStudents(
   keptId: string,
   mergedId: string,
-  fieldSelections: Record<string, 'A' | 'B'>,
+  fieldSelections: Record<string, 'A' | 'B' | 'combine'>,
   keptStudentUpdates: Partial<Student>,
   mergedBy: string
 ) {

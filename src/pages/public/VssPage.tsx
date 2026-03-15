@@ -15,7 +15,7 @@ const STEPS = [
     icon: UserPlus,
     title: 'Choose to Sponsor',
     description:
-      'Your $150 per year covers tuition, uniforms, school supplies, and meals for one child in Nepal.',
+      'Your $150 per year covers tuition, uniforms, and school supplies for one child in Nepal.',
   },
   {
     num: 2,
@@ -74,7 +74,7 @@ export default function VssPage() {
                 The Village Student Sponsorship program partners with local
                 Nepali coordinators who identify the students and communities
                 with the greatest need. Your sponsorship covers tuition, school
-                supplies, uniforms, and daily meals — everything a child needs to
+                supplies, and uniforms — everything a child needs to
                 stay in school.
               </p>
               <p>
@@ -168,8 +168,8 @@ export default function VssPage() {
           Ready to Change a Life?
         </h2>
         <p className="text-text-muted mb-8 max-w-lg mx-auto text-base leading-relaxed">
-          For $150 a year, you can give a child in Nepal access to education,
-          meals, and a future full of possibility.
+          For $150 a year, you can give a child in Nepal access to education
+          and a future full of possibility.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a

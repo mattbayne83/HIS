@@ -1,6 +1,6 @@
-# HIS — Himalayan Indigenous Services
+# HIS — Himali Indigenous Services
 
-Web application for [Himalayan Indigenous Services](https://www.his-serve.org/), a US-based 501(c)(3) non-profit facilitating transformation in Nepal through local partnerships, education, and community development. Managed by Bob Bayne.
+Web application for [Himali Indigenous Services](https://www.his-serve.org/), a US-based 501(c)(3) non-profit facilitating transformation in Nepal through local partnerships, education, and community development. Managed by Bob Bayne.
 
 ## Features
 

@@ -283,7 +283,7 @@ const BulkUploadPage = () => {
         >
           <ArrowLeft className="h-5 w-5 text-text-muted" />
         </button>
-        <h1 className="text-2xl font-display font-semibold text-text-high">
+        <h1 className="text-4xl font-display font-bold text-text-high">
           Bulk Upload Students
         </h1>
       </div>

@@ -23,6 +23,14 @@ export const router = createBrowserRouter([
       { path: 'news/:slug', element: <ArticlePage /> },
       { path: 'login', element: <LoginPage /> },
       {
+        path: 'reset-password',
+        lazy: () => import('./pages/public/ResetPasswordRequestPage'),
+      },
+      {
+        path: 'reset-password/confirm',
+        lazy: () => import('./pages/public/ResetPasswordConfirmPage'),
+      },
+      {
         path: 'design-demo',
         lazy: () => import('./pages/public/DesignDemoPage'),
       },
@@ -59,6 +67,10 @@ export const router = createBrowserRouter([
       {
         path: 'sponsorships',
         lazy: () => import('./pages/admin/SponsorshipsPage'),
+      },
+      {
+        path: 'donations',
+        lazy: () => import('./pages/admin/DonationsPage'),
       },
       {
         path: 'articles',

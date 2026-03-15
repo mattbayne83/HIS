@@ -28,3 +28,17 @@ export async function getSession() {
   if (error) throw error
   return data.session
 }
+
+export async function resetPasswordForEmail(email: string, redirectTo: string) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo,
+  })
+  if (error) throw error
+}
+
+export async function updatePassword(newPassword: string) {
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  })
+  if (error) throw error
+}
