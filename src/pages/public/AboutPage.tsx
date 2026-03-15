@@ -1,4 +1,5 @@
 import { Handshake, Sprout, Heart, GraduationCap, Gift, HandHeart } from 'lucide-react'
+import { Helmet } from 'react-helmet-async'
 import PageHero from '../../components/public/PageHero'
 import { Card, Button } from '../../components/ui'
 import aboutTeamImage from '../../assets/about-team.jpg'
@@ -58,7 +59,16 @@ const WAYS_TO_GIVE = [
 
 export default function AboutPage() {
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>Our Story - Himali Indigenous Services</title>
+        <meta
+          name="description"
+          content="Facilitating transformation in Nepal through local partnerships since 2018. 160+ students sponsored, 260+ women trained, 150+ leaders equipped. 501(c)(3) non-profit based in Tennessee."
+        />
+      </Helmet>
+
+      <div>
       <PageHero
         title="Our Story"
         subtitle="Facilitating transformation in Nepal through local partnerships and sustainable programs since 2018."
@@ -197,5 +207,6 @@ export default function AboutPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

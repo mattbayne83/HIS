@@ -77,18 +77,20 @@ Each admin CRUD page follows this structure:
 - **Card padding**: `lg` (p-8) for prominence, `md` (p-6) for compact layouts
 
 ## Key Files
-- `src/router.tsx` — Route definitions
-- `src/main.tsx` — App entry + auth listener
+- `src/router.tsx` — Route definitions (includes NotFoundPage catch-all route)
+- `src/main.tsx` — App entry + auth listener + HelmetProvider wrapper
 - `src/lib/queries.ts` — All Supabase CRUD operations (includes findPotentialDuplicates, mergeStudents)
 - `src/hooks/useQuery.ts` — Generic data fetching hook
 - `src/store/useAppStore.ts` — Global Zustand store
 - `src/types/database.ts` — TS types matching DB schema
 - `src/index.css` — Design tokens
+- `src/data/changelog.ts` — Version history and release notes
 - `src/utils/format.ts` — formatCents, formatDate, formatDateShort
 - `src/utils/slug.ts` — slugify
 - `src/utils/exportUtils.ts` — CSV/PDF/ZIP export (papaparse, jspdf, jszip), branded student profile PDFs
 - `src/utils/fuzzyMatch.ts` — Levenshtein distance, duplicate detection, rankDuplicates()
 - `src/components/students/` — DuplicateWarningCard, MergeStudentsModal, MergeHistoryCard
+- `src/pages/public/NotFoundPage.tsx` — Branded 404 page
 
 ## UI Component API
 - **Button**: `variant` (primary/secondary/accent/ghost/outline/danger/glass-primary), `size` (sm/md/lg), `loading`, `fullWidth` — always shows `cursor-pointer` on hover. All variants have colored hover shadows for depth.
@@ -112,7 +114,7 @@ npm run preview  # Preview production build
 ### GitHub Pages
 - **URL**: https://mattbayne83.github.io/HIS/
 - **Workflow**: `.github/workflows/deploy.yml` — auto-deploy on push to `main`
-- **Config**: `vite.config.ts` has `base: '/HIS/'` for GitHub Pages path
+- **Config**: `vite.config.ts` uses conditional base path — `/` in dev, `/HIS/` in production
 - **Secrets**: `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` configured in GitHub repo secrets
 
 ## Gotchas
@@ -148,3 +150,6 @@ npm run preview  # Preview production build
 - **Button shadows**: All variants use colored shadows on hover (lg for primary/secondary/danger, md for ghost/outline) for visual consistency
 - **Hero CTA hierarchy**: Primary button uses `size="lg"` with explicit price, secondary uses `size="md"` with `variant="ghost"` for clear visual dominance
 - **Footer design**: py-12 padding, text-2xl org name, separate email from address, visual divider before copyright for proper hierarchy
+- **SEO implementation**: react-helmet-async for dynamic meta tags, page-specific titles and descriptions on all public pages
+- **NotFoundPage**: Branded 404 with HIS design system, helpful navigation options
+- **Vite base path**: Conditional config (`mode === 'production' ? '/HIS/' : '/'`) — fixes lazy-loaded admin routes in dev

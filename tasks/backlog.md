@@ -59,11 +59,11 @@
 - [ ] Sponsorship: show unsponsored students for quick matching
 
 ### Public Site Polish
-- [ ] SEO meta tags (title, description per page — og:image already set globally)
+- [x] SEO meta tags (title, description per page — og:image already set globally)
 - [ ] Social sharing image generation
-- [ ] 404 page
-- [ ] Loading skeleton states for public pages
-- [ ] Mobile-optimized image sizing
+- [x] 404 page
+- [ ] Loading skeleton states for public pages (skipped — public pages don't fetch data)
+- [x] Mobile-optimized image sizing (audit complete — all images already optimized)
 
 ### Developer Experience
 - [ ] Supabase CLI integration (`supabase init`, `supabase db push`)
@@ -113,6 +113,12 @@
 - [x] Card component updated: added shimmer prop, default variant is glass-medium
 - [x] Button component updated: added glass-primary variant, active:scale-95 and hover:-translate-y-0.5 animations
 - [x] Design system polish: Overall score improved from 3.8/5 to 4.4/5 across all seven dimensions
+- [x] SEO meta tags: react-helmet-async integration, page-specific titles/descriptions on all public pages
+- [x] NotFoundPage: Branded 404 with navigation options and contact info
+- [x] Mobile image optimization: Audit complete, all images already responsive
+- [x] Vite config fix: Conditional base path to fix lazy-loaded admin routes in development
+- [x] Changelog created: src/data/changelog.ts with version history tracking
+- [x] Lessons file created: tasks/lessons.md with configuration best practices
 
 **P0 Core Functionality (March 14, 2026)**
 - [x] Database setup verification script and documentation

@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { Helmet } from 'react-helmet-async'
 import { UserPlus, Sparkles, Award } from 'lucide-react'
 import PageHero from '../../components/public/PageHero'
 import { Button, MapWidget } from '../../components/ui'
@@ -39,11 +40,17 @@ const STATS = [
 
 export default function WomensTrainingPage() {
   return (
-    <div>
-      <PageHero
-        title="Women's Training"
-        subtitle="Equipping women with the skills and confidence to build independent livelihoods."
-      />
+    <>
+      <Helmet>
+        <title>Women's Training - Himali Indigenous Services</title>
+        <meta name="description" content="Equip young women in Nepal with professional sewing skills, financial literacy, and confidence. $1,000 sponsors a woman through the entire program. 260+ graduates, 85% employment rate." />
+      </Helmet>
+
+      <div>
+        <PageHero
+          title="Women's Training"
+          subtitle="Equipping women with the skills and confidence to build independent livelihoods."
+        />
 
       {/* Program Overview */}
       <section className="max-w-6xl mx-auto px-6 py-16 md:py-24">
@@ -169,5 +176,6 @@ export default function WomensTrainingPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

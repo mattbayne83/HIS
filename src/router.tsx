@@ -10,6 +10,7 @@ import VssPage from './pages/public/VssPage'
 import WomensTrainingPage from './pages/public/WomensTrainingPage'
 import ArticlePage from './pages/public/ArticlePage'
 import LoginPage from './pages/public/LoginPage'
+import NotFoundPage from './pages/public/NotFoundPage'
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,8 @@ export const router = createBrowserRouter([
         path: 'design-demo',
         lazy: () => import('./pages/public/DesignDemoPage'),
       },
+      // Catch-all 404 route
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
   {

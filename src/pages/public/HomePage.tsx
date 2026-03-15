@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router'
+import { Helmet } from 'react-helmet-async'
 import {
   GraduationCap,
   Heart,
@@ -59,7 +60,16 @@ export default function HomePage() {
   }, [])
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>Himali Indigenous Services - Sponsor a Child in Nepal for $150/Year</title>
+        <meta
+          name="description"
+          content="Sponsor a student in rural Nepal for $150/year. 100% goes directly to education, uniforms, and supplies. Partnering with local leaders for lasting transformation since 2018."
+        />
+      </Helmet>
+
+      <div>
       {/* Hero - Immersive Storytelling */}
       <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}
@@ -350,5 +360,6 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

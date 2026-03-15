@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
-  base: '/HIS/', // GitHub Pages path
-})
+  base: mode === 'production' ? '/HIS/' : '/', // GitHub Pages in prod, root in dev
+}))

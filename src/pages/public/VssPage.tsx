@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router'
+import { Helmet } from 'react-helmet-async'
 import { UserPlus, Heart, GraduationCap } from 'lucide-react'
 import PageHero from '../../components/public/PageHero'
 import { Button, MapWidget, LoadingSpinner } from '../../components/ui'
@@ -51,7 +52,16 @@ export default function VssPage() {
   )
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <title>Student Sponsorship - Himali Indigenous Services</title>
+        <meta
+          name="description"
+          content="Sponsor a student in rural Nepal for $150/year. Covers tuition, uniforms, supplies, and lunch. 160+ students currently sponsored across 25+ remote villages."
+        />
+      </Helmet>
+
+      <div>
       <PageHero
         title="Village Student Sponsorship"
         subtitle="Giving children access to education for just $150 a year."
@@ -187,5 +197,6 @@ export default function VssPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

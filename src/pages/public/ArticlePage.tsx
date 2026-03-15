@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router'
+import { Helmet } from 'react-helmet-async'
 import { ArrowLeft, Calendar, User } from 'lucide-react'
 import { LoadingSpinner } from '../../components/ui'
 import { useQuery } from '../../hooks/useQuery'
@@ -63,10 +64,20 @@ export default function ArticlePage() {
     .split('\n\n')
     .filter((p) => p.trim().length > 0)
 
+  const metaDescription = bodyText.length > 0
+    ? bodyText.substring(0, 155) + (bodyText.length > 155 ? '...' : '')
+    : 'Read the latest news and updates from Himali Indigenous Services working in Nepal.'
+
   return (
-    <div>
-      {/* Header image */}
-      {article.featured_image_url && (
+    <>
+      <Helmet>
+        <title>{article.title} - Himali Indigenous Services</title>
+        <meta name="description" content={metaDescription} />
+      </Helmet>
+
+      <div>
+        {/* Header image */}
+        {article.featured_image_url && (
         <div className="w-full h-64 md:h-80">
           <img
             src={article.featured_image_url}
@@ -125,5 +136,6 @@ export default function ArticlePage() {
         </div>
       </article>
     </div>
+    </>
   )
 }
