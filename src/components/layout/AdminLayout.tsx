@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useLocation, useNavigate } from 'react-router'
+import { Outlet, NavLink, useLocation, useNavigate, Link } from 'react-router'
 import {
   LayoutDashboard,
   GraduationCap,
@@ -7,6 +7,7 @@ import {
   Menu,
   X,
   LogOut,
+  Home,
 } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
 import { signOut } from '../../lib/auth'
@@ -41,7 +42,7 @@ export function AdminLayout() {
     <div className="min-h-screen flex bg-background">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-primary text-white transform transition-transform duration-300 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-primary text-white transform transition-transform duration-300 lg:translate-x-0 flex flex-col ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -80,6 +81,22 @@ export function AdminLayout() {
             )
           })}
         </nav>
+
+        {/* Bottom Link */}
+        <div className="px-3 py-4 border-t border-white/10">
+          <Link
+            to="/"
+            onClick={() => {
+              if (window.innerWidth < 1024) {
+                toggleSidebar()
+              }
+            }}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-white/90 hover:bg-white/10 hover:text-white hover:shadow-md transition-all duration-200"
+          >
+            <Home size={20} />
+            <span className="text-base">Return to HIS Site</span>
+          </Link>
+        </div>
       </aside>
 
       {/* Mobile overlay */}

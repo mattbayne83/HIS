@@ -84,13 +84,13 @@ Each admin CRUD page follows this structure:
 - `src/components/students/` — DuplicateWarningCard, MergeStudentsModal, MergeHistoryCard
 
 ## UI Component API
-- **Button**: `variant` (primary/secondary/danger), `size` (sm/md/lg), `loading`, `fullWidth`
+- **Button**: `variant` (primary/secondary/danger), `size` (sm/md/lg), `loading`, `fullWidth` — always shows `cursor-pointer` on hover
 - **Badge**: `variant` (success/warning/danger/neutral), `label` prop (NOT children)
 - **Modal**: `open`, `onClose`, `title`, `size` (sm/md/lg)
 - **DataTable**: `columns`, `data`, `onRowClick`, `emptyMessage`, optional: `selectable`, `selectedIds` (Set<string>), `onSelectionChange`
 - **Input/Select/Textarea**: `label`, `error`, `required`, forwarded ref
 - **Select**: `options` array of `{value, label}`, `placeholder`
-- **Card**: `padding` (sm/md/lg)
+- **Card**: `padding` (sm/md/lg), `interactive` (visual hover effects only, no cursor change)
 
 ## Commands
 ```bash
@@ -132,3 +132,6 @@ npm run preview  # Preview production build
 - **findPotentialDuplicates**: Returns full `Student[]` objects (fetches complete records after database function call) to work with rankDuplicates fuzzy matching
 - **Search pattern**: SponsorshipsPage and StudentsPage both use same search pattern — relative div with absolute-positioned Search icon, filters by donor name, student name, and village
 - **Student detail photos**: 320px (w-80) on view page, 256px (w-64) on edit form
+- **AdminLayout**: "Return to HIS Site" link is at bottom of left sidebar (NOT in top header) — uses flexbox layout with footer section
+- **Card interactive prop**: Only adds visual hover effects (shadow, translate, border) — does NOT change cursor to pointer
+- **Button cursor**: All buttons explicitly show `cursor-pointer` on hover for consistent UX across browsers

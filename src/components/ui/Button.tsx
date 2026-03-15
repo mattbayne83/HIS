@@ -24,7 +24,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-250 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-250 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer';
 
     const variantClasses = {
       primary: 'bg-primary text-white hover:bg-primary-light hover:shadow-lg hover:shadow-primary/25 active:bg-primary-dark focus:ring-primary/30',

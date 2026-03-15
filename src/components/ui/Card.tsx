@@ -29,7 +29,7 @@ const Card: React.FC<CardProps> = ({
   };
 
   const interactiveClasses = interactive
-    ? 'cursor-pointer hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300'
+    ? 'hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300'
     : 'transition-shadow duration-250';
 
   return (
