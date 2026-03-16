@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { GitMerge } from 'lucide-react'
 import Modal from '../ui/Modal'
 import Button from '../ui/Button'
-import type { Student } from '../../types/database'
+import type { StudentWithLocation } from '../../types/database'
+import { formatStudentLocation } from '../../utils/format'
 
 export interface MergeStudentsModalProps {
   open: boolean
   onClose: () => void
-  studentA: Student // "Kept" student (will remain active)
-  studentB: Student // "Merged" student (will be marked as merged)
+  studentA: StudentWithLocation // "Kept" student (will remain active)
+  studentB: StudentWithLocation // "Merged" student (will be marked as merged)
   onConfirmMerge: (
     keptId: string,
     mergedId: string,
@@ -20,8 +21,7 @@ type FieldKey =
   | 'name'
   | 'age'
   | 'grade'
-  | 'village'
-  | 'region'
+  | 'municipality_id' // Represents full location selection (province, district, municipality)
   | 'coordinator'
   | 'status'
   | 'photo_url'
@@ -39,8 +39,7 @@ const MergeStudentsModal: React.FC<MergeStudentsModalProps> = ({
     name: 'A',
     age: 'A',
     grade: 'A',
-    village: 'A',
-    region: 'A',
+    municipality_id: 'A', // Controls province_id, district_id, and municipality_id together
     coordinator: 'A',
     status: 'A',
     photo_url: 'A',
@@ -312,16 +311,10 @@ const MergeStudentsModal: React.FC<MergeStudentsModalProps> = ({
             {renderFieldRow('Age', 'age', studentA.age, studentB.age)}
             {renderFieldRow('Grade', 'grade', studentA.grade, studentB.grade)}
             {renderFieldRow(
-              'Village',
-              'village',
-              studentA.village,
-              studentB.village
-            )}
-            {renderFieldRow(
-              'Region',
-              'region',
-              studentA.region,
-              studentB.region
+              'Location',
+              'municipality_id',
+              formatStudentLocation(studentA) || '(none)',
+              formatStudentLocation(studentB) || '(none)'
             )}
           </div>
 

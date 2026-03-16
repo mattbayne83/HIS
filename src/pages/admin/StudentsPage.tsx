@@ -631,8 +631,9 @@ export default function StudentsPage() {
             name: form.name,
             age: parseInt(form.age, 10) || 0,
             grade: form.grade,
-            village: form.village,
-            region: form.region,
+            province_id: form.province_id ? parseInt(form.province_id, 10) : null,
+            district_id: form.district_id ? parseInt(form.district_id, 10) : null,
+            municipality_id: form.municipality_id ? parseInt(form.municipality_id, 10) : null,
             coordinator: form.coordinator,
             status: form.status,
             notes: form.notes || null,
@@ -640,6 +641,9 @@ export default function StudentsPage() {
             merged_into_id: null,
             created_at: '',
             updated_at: '',
+            province: null,
+            district: null,
+            municipality: null,
           }}
           studentB={mergeTargetStudent}
           onConfirmMerge={handleConfirmMerge}

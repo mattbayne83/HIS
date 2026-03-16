@@ -2,6 +2,7 @@ import { AlertTriangle, Eye, GitMerge, X } from 'lucide-react'
 import Card from '../ui/Card'
 import Button from '../ui/Button'
 import type { DuplicateCandidate } from '../../types/database'
+import { formatStudentLocation } from '../../utils/format'
 
 export interface DuplicateWarningCardProps {
   duplicates: DuplicateCandidate[]
@@ -52,8 +53,10 @@ const DuplicateWarningCard: React.FC<DuplicateWarningCardProps> = ({
                       </div>
                       <p className="text-sm text-text-muted mb-2">
                         Age {duplicate.student.age} • Grade{' '}
-                        {duplicate.student.grade} • {duplicate.student.village},{' '}
-                        {duplicate.student.region}
+                        {duplicate.student.grade}
+                        {formatStudentLocation(duplicate.student) && (
+                          <> • {formatStudentLocation(duplicate.student)}</>
+                        )}
                       </p>
                       {duplicate.reasons.length > 0 && (
                         <div className="flex flex-wrap gap-1">

@@ -20,8 +20,8 @@ import {
   createSponsorship,
   updateSponsorship,
 } from '../../lib/queries'
-import type { Sponsorship, SponsorshipStatus } from '../../types/database'
-import { formatDateShort } from '../../utils/format'
+import type { Sponsorship, SponsorshipStatus, StudentWithLocation } from '../../types/database'
+import { formatDateShort, formatStudentLocationShort } from '../../utils/format'
 
 const STATUS_OPTIONS = [
   { value: '', label: 'All Statuses' },
@@ -64,10 +64,10 @@ export default function SponsorshipsPage() {
       ? (s.donor as { name: string } | undefined)?.name
           ?.toLowerCase()
           .includes(search.toLowerCase()) ||
-        (s.student as { name: string; village: string } | undefined)?.name
+        (s.student as StudentWithLocation | undefined)?.name
           ?.toLowerCase()
           .includes(search.toLowerCase()) ||
-        (s.student as { name: string; village: string } | undefined)?.village
+        formatStudentLocationShort((s.student as StudentWithLocation | undefined) || {} as StudentWithLocation)
           ?.toLowerCase()
           .includes(search.toLowerCase())
       : true
@@ -86,8 +86,10 @@ export default function SponsorshipsPage() {
       key: 'student',
       label: 'Student',
       render: (_, row) => {
-        const student = row.student as { name: string; village: string } | undefined
-        return student ? `${student.name} (${student.village})` : '—'
+        const student = row.student as StudentWithLocation | undefined
+        if (!student) return '—'
+        const location = formatStudentLocationShort(student)
+        return location ? `${student.name} (${location})` : student.name
       },
     },
     {
@@ -201,7 +203,7 @@ export default function SponsorshipsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
           <input
             type="text"
-            placeholder="Search by donor, student, or village..."
+            placeholder="Search by donor, student, or location..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full h-[42px] pl-10 pr-3 py-2 rounded-lg border border-border bg-white text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -245,10 +247,13 @@ export default function SponsorshipsPage() {
             label="Student"
             required
             placeholder="Select a student"
-            options={(students ?? []).map((s) => ({
-              value: s.id,
-              label: `${s.name} — ${s.village}`,
-            }))}
+            options={(students ?? []).map((s) => {
+              const location = formatStudentLocationShort(s)
+              return {
+                value: s.id,
+                label: location ? `${s.name} — ${location}` : s.name,
+              }
+            })}
             value={newStudentId}
             onChange={(e) => setNewStudentId(e.target.value)}
           />

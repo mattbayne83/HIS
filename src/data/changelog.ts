@@ -7,6 +7,24 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: '1.2.0',
+    date: '2026-03-15',
+    title: 'Nepal Location Hierarchy',
+    items: [
+      'Implemented full Nepal administrative hierarchy (Province → District → Municipality)',
+      'Imported 837 location records: 7 provinces, 77 districts, 753 municipalities',
+      'Replaced text fields (region, village) with foreign keys (province_id, district_id, municipality_id)',
+      'Added cascading dropdowns on student forms with automatic filtering',
+      'Created StudentWithLocation type with joined location data',
+      'Updated all student queries to join location tables for name display',
+      'Added location formatting utilities (formatStudentLocation, formatStudentLocationShort)',
+      'Display locations throughout UI (Sponsorships table, duplicate detection, merge modal)',
+      'Updated map helpers to geocode using municipality + district names',
+      'Enhanced search to include location names on Sponsorships page',
+      'Migration 004: Created provinces, districts, municipalities tables with constraints',
+    ],
+  },
+  {
     version: '1.1.0',
     date: '2026-03-14',
     title: 'Public Site Polish & SEO',

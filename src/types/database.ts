@@ -57,6 +57,13 @@ export interface Student {
   updated_at: string
 }
 
+// Student with location names joined from location tables
+export interface StudentWithLocation extends Student {
+  province?: Province | null
+  district?: District | null
+  municipality?: Municipality | null
+}
+
 export interface Donor {
   id: string
   name: string

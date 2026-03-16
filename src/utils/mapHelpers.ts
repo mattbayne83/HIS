@@ -1,38 +1,47 @@
-import type { Student, Ministry } from '../types/database'
+import type { StudentWithLocation, Ministry } from '../types/database'
 import type { MapLocation } from '../types/map'
 import { getCoordinates } from '../data/nepal-locations'
+import { formatStudentLocation } from './format'
 
 /**
- * Group students by village and produce one MapLocation per village.
- * Students whose village/region can't be geocoded are silently skipped.
+ * Group students by municipality and produce one MapLocation per municipality.
+ * Students whose location can't be geocoded are silently skipped.
  */
-export function studentsToGroupedLocations(students: Student[]): MapLocation[] {
+export function studentsToGroupedLocations(students: StudentWithLocation[]): MapLocation[] {
   const grouped = new Map<
     string,
-    { coords: [number, number]; region: string; count: number }
+    { coords: [number, number]; locationName: string; count: number }
   >()
 
   for (const s of students) {
-    const coords = getCoordinates(s.village, s.region)
+    // Skip students without location data
+    if (!s.municipality?.name || !s.district?.name) continue
+
+    // Try to get coordinates using municipality and district names
+    const coords = getCoordinates(s.municipality.name, s.district.name)
     if (!coords) continue
 
-    const key = `${s.village}|${s.region}`
+    const key = `${s.municipality.name}|${s.district.name}|${s.province?.name || ''}`
     const existing = grouped.get(key)
     if (existing) {
       existing.count += 1
     } else {
-      grouped.set(key, { coords, region: s.region, count: 1 })
+      grouped.set(key, {
+        coords,
+        locationName: formatStudentLocation(s),
+        count: 1
+      })
     }
   }
 
-  return Array.from(grouped.entries()).map(([key, { coords, region, count }]) => ({
+  return Array.from(grouped.entries()).map(([key, { coords, locationName, count }]) => ({
     id: key,
     lat: coords[0],
     lng: coords[1],
-    label: key.split('|')[0],
+    label: key.split('|')[0], // Municipality name
     type: 'student',
     details: {
-      region,
+      region: locationName,
       count,
       description: `${count} sponsored student${count === 1 ? '' : 's'}`,
     },
@@ -42,21 +51,24 @@ export function studentsToGroupedLocations(students: Student[]): MapLocation[] {
 /**
  * One MapLocation per student (not grouped).
  */
-export function studentsToMapLocations(students: Student[]): MapLocation[] {
+export function studentsToMapLocations(students: StudentWithLocation[]): MapLocation[] {
   const locations: MapLocation[] = []
 
   for (const s of students) {
-    const coords = getCoordinates(s.village, s.region)
+    // Skip students without location data
+    if (!s.municipality?.name || !s.district?.name) continue
+
+    const coords = getCoordinates(s.municipality.name, s.district.name)
     if (!coords) continue
 
     locations.push({
       id: s.id,
       lat: coords[0],
       lng: coords[1],
-      label: s.village,
+      label: s.municipality.name,
       type: 'student',
       details: {
-        region: s.region,
+        region: formatStudentLocation(s),
         description: `${s.name}, Grade ${s.grade}`,
       },
     })

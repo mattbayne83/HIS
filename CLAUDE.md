@@ -80,13 +80,13 @@ Each admin CRUD page follows this structure:
 ## Key Files
 - `src/router.tsx` — Route definitions (includes NotFoundPage catch-all route)
 - `src/main.tsx` — App entry + auth listener + HelmetProvider wrapper
-- `src/lib/queries.ts` — All Supabase CRUD operations (includes findPotentialDuplicates, mergeStudents, getProvinces, getDistricts, getMunicipalities)
+- `src/lib/queries.ts` — All Supabase CRUD operations (includes findPotentialDuplicates, mergeStudents, getProvinces, getDistricts, getMunicipalities). Student queries return `StudentWithLocation[]` with joined location data.
 - `src/hooks/useQuery.ts` — Generic data fetching hook
 - `src/store/useAppStore.ts` — Global Zustand store
-- `src/types/database.ts` — TS types matching DB schema (includes Province, District, Municipality interfaces)
+- `src/types/database.ts` — TS types matching DB schema (includes Province, District, Municipality interfaces, StudentWithLocation extends Student)
 - `src/index.css` — Design tokens
 - `src/data/changelog.ts` — Version history and release notes
-- `src/utils/format.ts` — formatCents, formatDate, formatDateShort
+- `src/utils/format.ts` — formatCents, formatDate, formatDateShort, formatStudentLocation, formatStudentLocationShort
 - `src/utils/slug.ts` — slugify
 - `src/utils/exportUtils.ts` — CSV/PDF/ZIP export (papaparse, jspdf, jszip), branded student profile PDFs
 - `src/utils/fuzzyMatch.ts` — Levenshtein distance, duplicate detection using municipality/district IDs, rankDuplicates()
@@ -159,5 +159,8 @@ npm run import:locations # Import Nepal location data (requires SUPABASE_SERVICE
 - **Nepal location hierarchy**: Province → District → Municipality cascading dropdowns on Students pages. All three tables populated with 837 records (7 provinces, 77 districts, 753 municipalities). Students have nullable `province_id`, `district_id`, `municipality_id` foreign keys. Old `region` and `village` text columns dropped.
 - **Location dropdowns**: Province selection filters districts, district selection filters municipalities. Changing province resets district + municipality. All location fields are optional.
 - **Duplicate detection with locations**: Uses `municipality_id` for exact matches (high score), falls back to `district_id` for partial matches (medium score). Location is optional for duplicate detection.
+- **StudentWithLocation type**: Extends `Student` with optional `province`, `district`, `municipality` objects. All student queries (`getStudents`, `getStudent`, `getSponsorships`) join location tables and return this type.
+- **Location formatting utilities**: `formatStudentLocation(student)` returns "Municipality, District, Province" (full), `formatStudentLocationShort(student)` returns just municipality (or district/province as fallback).
+- **Location display**: SponsorshipsPage shows "Name (Municipality)" in table and dropdowns. DuplicateWarningCard shows location. MergeStudentsModal shows full location string for comparison.
+- **Map helpers**: `studentsToGroupedLocations()` and `studentsToMapLocations()` use municipality + district names for geocoding via `getCoordinates()`.
 - **Bulk upload limitation**: CSV import accepts province/district/municipality columns but currently sets all IDs to null (name→ID mapping not implemented — deferred enhancement).
-- **Export limitation**: CSV and PDF exports show location IDs instead of names (ID→name lookup not implemented — deferred enhancement). Functionality works, but UX needs improvement.

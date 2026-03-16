@@ -1,6 +1,7 @@
 import { supabase } from './supabase'
 import type {
   Student,
+  StudentWithLocation,
   StudentStatus,
   Donor,
   Donation,
@@ -19,21 +20,34 @@ import type {
 // ── Students ──
 
 export async function getStudents(status?: StudentStatus) {
-  let query = supabase.from('students').select('*').order('name')
+  let query = supabase
+    .from('students')
+    .select(`
+      *,
+      province:provinces(id, name),
+      district:districts(id, name),
+      municipality:municipalities(id, name)
+    `)
+    .order('name')
   if (status) query = query.eq('status', status)
   const { data, error } = await query
   if (error) throw error
-  return data as Student[]
+  return data as StudentWithLocation[]
 }
 
 export async function getStudent(id: string) {
   const { data, error } = await supabase
     .from('students')
-    .select('*')
+    .select(`
+      *,
+      province:provinces(id, name),
+      district:districts(id, name),
+      municipality:municipalities(id, name)
+    `)
     .eq('id', id)
     .single()
   if (error) throw error
-  return data as Student
+  return data as StudentWithLocation
 }
 
 export async function createStudent(
@@ -149,7 +163,16 @@ export async function deleteDonor(id: string) {
 export async function getSponsorships(status?: SponsorshipStatus) {
   let query = supabase
     .from('sponsorships')
-    .select('*, donor:donors(name, email), student:students(name, village)')
+    .select(`
+      *,
+      donor:donors(name, email),
+      student:students(
+        *,
+        province:provinces(id, name),
+        district:districts(id, name),
+        municipality:municipalities(id, name)
+      )
+    `)
     .order('start_date', { ascending: false })
   if (status) query = query.eq('status', status)
   const { data, error } = await query

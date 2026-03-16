@@ -68,3 +68,24 @@ return (
 ```
 
 **Rule**: When adding new top-level elements to existing components, wrap in `<>...</>` fragments.
+
+---
+
+## Database Schema Migrations
+
+**Lesson**: After migrating database schema (removing columns), queries and UI components must be updated together to prevent runtime errors.
+
+**What happened (March 15, 2026)**: Migration 004 replaced `region` and `village` text columns with `province_id`, `district_id`, `municipality_id` foreign keys. Initial fixes only updated type definitions, but queries still tried to fetch old columns, causing "column does not exist" errors in production.
+
+**Solution pattern**:
+1. Update type definitions first (`Student` interface, add `StudentWithLocation` type)
+2. Update **all** queries that fetch students (not just `getStudents` — also `getSponsorships`, etc.)
+3. Add location joins to query selects: `select('*, province:provinces(...), district:districts(...), municipality:municipalities(...)')`
+4. Create formatting utilities for display (`formatStudentLocation`, `formatStudentLocationShort`)
+5. Update UI components to use new types and utilities
+6. Re-implement helper functions that depended on old fields (map helpers, export utilities)
+7. Build and test thoroughly before marking complete
+
+**Common mistake**: Updating only the obvious query (`getStudents`) while missing related queries (`getSponsorships`, `getStudent`) that also fetch student data.
+
+**Rule**: Database schema changes require systematic updates across types → queries → utilities → components → helpers. Build early and often to catch missing updates.
