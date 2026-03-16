@@ -23,8 +23,9 @@ interface StudentRow {
   name: string
   age: string
   grade: string
-  village: string
-  region: string
+  province?: string
+  district?: string
+  municipality?: string
   coordinator?: string
   status?: string
   notes?: string
@@ -87,8 +88,8 @@ const BulkUploadPage = () => {
         return
       }
 
-      // Check for required columns
-      const requiredColumns = ['name', 'age', 'grade', 'village', 'region']
+      // Check for required columns (location fields are now optional)
+      const requiredColumns = ['name', 'age', 'grade']
       const firstRow = data[0]
       const missingColumns = requiredColumns.filter((col) => !(col in firstRow))
 
@@ -108,8 +109,9 @@ const BulkUploadPage = () => {
           name: row.name,
           age: row.age,
           grade: row.grade,
-          village: row.village,
-          region: row.region,
+          province: row.province ?? '',
+          district: row.district ?? '',
+          municipality: row.municipality ?? '',
           coordinator: row.coordinator ?? '',
           status: row.status ?? '',
           notes: row.notes ?? '',
@@ -203,12 +205,14 @@ const BulkUploadPage = () => {
         }
 
         // Build student record
+        // TODO: Add location name → ID lookup (fetch all provinces/districts/municipalities once)
         studentsWithPhotos.push({
           name: row.data.name.trim(),
           age: parseInt(row.data.age, 10),
           grade: row.data.grade.trim(),
-          village: row.data.village.trim(),
-          region: row.data.region.trim(),
+          province_id: null, // TODO: Map row.data.province text → province ID
+          district_id: null, // TODO: Map row.data.district text → district ID
+          municipality_id: null, // TODO: Map row.data.municipality text → municipality ID
           coordinator: row.data.coordinator?.trim() || '',
           status: (row.data.status?.trim() as StudentStatus) || 'active',
           notes: row.data.notes?.trim() || null,
@@ -304,7 +308,7 @@ const BulkUploadPage = () => {
               onFilesChange={handleCsvUpload}
               error={csvError}
               label="Upload CSV File"
-              helperText="Expected columns: name, age, grade, village, region, coordinator, status, notes, photo_filename"
+              helperText="Expected columns: name, age, grade, province, district, municipality, coordinator, status, notes, photo_filename"
             />
 
             <div className="mt-4">
@@ -344,7 +348,7 @@ const BulkUploadPage = () => {
 
               <ValidationPreviewTable
                 rows={validationRows}
-                columns={['name', 'age', 'grade', 'village', 'region']}
+                columns={['name', 'age', 'grade', 'province', 'district', 'municipality']}
               />
             </Card>
           )}
@@ -531,7 +535,7 @@ const BulkUploadPage = () => {
             </h2>
             <ValidationPreviewTable
               rows={validationRows}
-              columns={['name', 'age', 'grade', 'village', 'region']}
+              columns={['name', 'age', 'grade', 'province', 'district', 'municipality']}
             />
           </Card>
 

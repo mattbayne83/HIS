@@ -11,6 +11,9 @@ import type {
   Ministry,
   Profile,
   StudentMergeLog,
+  Province,
+  District,
+  Municipality,
 } from '../types/database'
 
 // ── Students ──
@@ -59,6 +62,37 @@ export async function updateStudent(id: string, updates: Partial<Student>) {
 export async function deleteStudent(id: string) {
   const { error } = await supabase.from('students').delete().eq('id', id)
   if (error) throw error
+}
+
+// ── Nepal Location Hierarchy ──
+
+export async function getProvinces() {
+  const { data, error } = await supabase
+    .from('provinces')
+    .select('*')
+    .order('name')
+  if (error) throw error
+  return data as Province[]
+}
+
+export async function getDistricts(provinceId?: number) {
+  let query = supabase.from('districts').select('*').order('name')
+  if (provinceId) {
+    query = query.eq('province_id', provinceId)
+  }
+  const { data, error } = await query
+  if (error) throw error
+  return data as District[]
+}
+
+export async function getMunicipalities(districtId?: number) {
+  let query = supabase.from('municipalities').select('*').order('name')
+  if (districtId) {
+    query = query.eq('district_id', districtId)
+  }
+  const { data, error } = await query
+  if (error) throw error
+  return data as Municipality[]
 }
 
 // ── Donors ──
@@ -406,18 +440,19 @@ export async function bulkCreateStudents(
 /**
  * Find potential duplicate students using the database function
  * Returns candidates for client-side fuzzy name matching
+ * Matches on municipality if provided, else district (flexible for migration)
  */
 export async function findPotentialDuplicates(
   name: string,
-  village: string,
-  region: string,
+  municipalityId: number | null,
+  districtId: number | null,
   age: number,
   excludeId?: string
 ): Promise<Student[]> {
   const { data, error } = await supabase.rpc('find_potential_duplicates', {
     p_name: name,
-    p_village: village,
-    p_region: region,
+    p_municipality_id: municipalityId,
+    p_district_id: districtId,
     p_age: age,
     p_exclude_id: excludeId || null,
   })
@@ -428,8 +463,8 @@ export async function findPotentialDuplicates(
   const candidates = data as Array<{
     student_id: string
     name: string
-    village: string
-    region: string
+    municipality_id: number | null
+    district_id: number | null
     age: number
     grade: string
     photo_url: string | null

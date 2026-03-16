@@ -13,6 +13,7 @@ Managed by Bob Bayne. Existing site: https://www.his-serve.org/
 - **Routing**: React Router 7 (BrowserRouter)
 - **Fonts**: Inter (body `font-sans`), DM Serif Display (headings `font-display`)
 - **Export**: papaparse (CSV), jspdf (PDF), jszip (ZIP)
+- **Data Import**: dotenv (Nepal location data import)
 
 ## Architecture
 
@@ -79,18 +80,19 @@ Each admin CRUD page follows this structure:
 ## Key Files
 - `src/router.tsx` — Route definitions (includes NotFoundPage catch-all route)
 - `src/main.tsx` — App entry + auth listener + HelmetProvider wrapper
-- `src/lib/queries.ts` — All Supabase CRUD operations (includes findPotentialDuplicates, mergeStudents)
+- `src/lib/queries.ts` — All Supabase CRUD operations (includes findPotentialDuplicates, mergeStudents, getProvinces, getDistricts, getMunicipalities)
 - `src/hooks/useQuery.ts` — Generic data fetching hook
 - `src/store/useAppStore.ts` — Global Zustand store
-- `src/types/database.ts` — TS types matching DB schema
+- `src/types/database.ts` — TS types matching DB schema (includes Province, District, Municipality interfaces)
 - `src/index.css` — Design tokens
 - `src/data/changelog.ts` — Version history and release notes
 - `src/utils/format.ts` — formatCents, formatDate, formatDateShort
 - `src/utils/slug.ts` — slugify
 - `src/utils/exportUtils.ts` — CSV/PDF/ZIP export (papaparse, jspdf, jszip), branded student profile PDFs
-- `src/utils/fuzzyMatch.ts` — Levenshtein distance, duplicate detection, rankDuplicates()
+- `src/utils/fuzzyMatch.ts` — Levenshtein distance, duplicate detection using municipality/district IDs, rankDuplicates()
 - `src/components/students/` — DuplicateWarningCard, MergeStudentsModal, MergeHistoryCard
 - `src/pages/public/NotFoundPage.tsx` — Branded 404 page
+- `scripts/import-nepal-locations.js` — Import 837 location records from GitHub (7 provinces + 77 districts + 753 municipalities)
 
 ## UI Component API
 - **Button**: `variant` (primary/secondary/accent/ghost/outline/danger/glass-primary), `size` (sm/md/lg), `loading`, `fullWidth` — always shows `cursor-pointer` on hover. All variants have colored hover shadows for depth.
@@ -103,10 +105,11 @@ Each admin CRUD page follows this structure:
 
 ## Commands
 ```bash
-npm run dev      # Start dev server
-npm run build    # Type-check + build
-npm run lint     # ESLint
-npm run preview  # Preview production build
+npm run dev              # Start dev server
+npm run build            # Type-check + build
+npm run lint             # ESLint
+npm run preview          # Preview production build
+npm run import:locations # Import Nepal location data (requires SUPABASE_SERVICE_KEY env var)
 ```
 
 ## Deployment
@@ -138,8 +141,8 @@ npm run preview  # Preview production build
 - **PDF generation is client-side** — jsPDF creates PDFs in browser, no server needed. Branded layout with HIS colors (Crimson Red header, Mountain Bronze borders, Warm Sand dividers). Photos cropped to square using canvas API (object-fit: cover behavior).
 - **Hidden nav items**: Donations, Articles, Ministries are hidden from sidebar nav but routes still exist and work
 - **Merge functionality**: Selection type is `Record<string, 'A' | 'B' | 'combine'>` — 'combine' is used for notes merging. Must update interface, component state, and query function types together.
-- **findPotentialDuplicates**: Returns full `Student[]` objects (fetches complete records after database function call) to work with rankDuplicates fuzzy matching
-- **Search pattern**: SponsorshipsPage and StudentsPage both use same search pattern — relative div with absolute-positioned Search icon, filters by donor name, student name, and village
+- **findPotentialDuplicates**: Returns full `Student[]` objects (fetches complete records after database function call) to work with rankDuplicates fuzzy matching. Uses `municipality_id` and `district_id` for location matching.
+- **Search pattern**: SponsorshipsPage and StudentsPage both use same search pattern — relative div with absolute-positioned Search icon, filters by donor name, student name, and municipality
 - **Student detail photos**: 320px (w-80) on view page, 256px (w-64) on edit form
 - **AdminLayout**: "Return to HIS Site" link is at bottom of left sidebar (NOT in top header) — uses flexbox layout with footer section
 - **Card interactive prop**: Only adds visual hover effects (shadow, translate, border) — does NOT change cursor to pointer
@@ -153,3 +156,8 @@ npm run preview  # Preview production build
 - **SEO implementation**: react-helmet-async for dynamic meta tags, page-specific titles and descriptions on all public pages
 - **NotFoundPage**: Branded 404 with HIS design system, helpful navigation options
 - **Vite base path**: Conditional config (`mode === 'production' ? '/HIS/' : '/'`) — fixes lazy-loaded admin routes in dev
+- **Nepal location hierarchy**: Province → District → Municipality cascading dropdowns on Students pages. All three tables populated with 837 records (7 provinces, 77 districts, 753 municipalities). Students have nullable `province_id`, `district_id`, `municipality_id` foreign keys. Old `region` and `village` text columns dropped.
+- **Location dropdowns**: Province selection filters districts, district selection filters municipalities. Changing province resets district + municipality. All location fields are optional.
+- **Duplicate detection with locations**: Uses `municipality_id` for exact matches (high score), falls back to `district_id` for partial matches (medium score). Location is optional for duplicate detection.
+- **Bulk upload limitation**: CSV import accepts province/district/municipality columns but currently sets all IDs to null (name→ID mapping not implemented — deferred enhancement).
+- **Export limitation**: CSV and PDF exports show location IDs instead of names (ID→name lookup not implemented — deferred enhancement). Functionality works, but UX needs improvement.

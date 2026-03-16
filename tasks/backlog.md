@@ -44,13 +44,10 @@
 - [ ] Feature 2: Email to submit new/changes (Supabase Edge Function + review queue)
 
 ### Admin Enhancements
-- [ ] **Structured location data**: Replace free-text `region`/`village` fields with Nepal administrative divisions (provinces, districts, municipalities)
-  - **Research complete**: [docs/nepal-regions-villages-research.md](../docs/nepal-regions-villages-research.md)
-  - **Recommended approach**: Phase 1 — District dropdown + free-text village (low risk, quick win)
-  - **Benefits**: Data quality, analytics, enables dashboard map feature
-  - **Datasets ready**: 7 provinces, 77 districts, 753 municipalities (JSON format, ready to import)
-- [ ] Dashboard map: populate with student locations by district (aggregate by region/village)
-  - **Blocked by**: Structured location data implementation (see above)
+- [ ] Dashboard map: populate with student locations by district (aggregate by municipality)
+  - **Note**: Location data is now structured (province → district → municipality) — ready for map implementation
+- [ ] **Location enhancement — Bulk upload**: Implement name→ID lookup for province/district/municipality in CSV import (currently sets to null)
+- [ ] **Location enhancement — Exports**: Implement ID→name lookup for province/district/municipality in CSV/PDF exports (currently shows IDs)
 - [ ] PdfExportPage — student profile PDF generation (skeleton exists)
 - [ ] Article rich text editor (replace plain textarea with markdown or WYSIWYG)
 - [ ] Article featured image upload
@@ -136,6 +133,19 @@
 - [x] BulkActionsToolbar (floating glass morphism toolbar)
 - [x] Export utilities (papaparse, jspdf, jszip)
 - [x] Fuzzy matching utilities (Levenshtein distance, ranking)
+
+**Nepal Location Hierarchy (March 15, 2026)**
+- [x] Database migration: 3 new tables (provinces, districts, municipalities), updated students table
+- [x] Data import script: 837 location records from GitHub (7 provinces, 77 districts, 753 municipalities)
+- [x] TypeScript types: Province, District, Municipality interfaces
+- [x] Query functions: getProvinces(), getDistricts(), getMunicipalities()
+- [x] Cascading dropdowns: Province → District → Municipality on Students and StudentDetail pages
+- [x] Duplicate detection updated: Uses municipality_id and district_id for location matching
+- [x] Validation updated: Location fields are optional (no required validation)
+- [x] Table display: Shows location names (not IDs) using lookup maps
+- [x] Dropped old fields: region and village text columns removed from students table
+- [ ] Bulk upload enhancement: Name→ID lookup for CSV location columns (deferred)
+- [ ] Export enhancement: ID→name lookup for CSV/PDF location display (deferred)
 
 **Deployment & GitHub Pages (March 2026)**
 - [x] GitHub Actions workflow for auto-deployment

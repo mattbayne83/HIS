@@ -19,14 +19,16 @@ export function downloadBlob(blob: Blob, filename: string): void {
 
 /**
  * Exports selected students to CSV format
+ * TODO: Add location name lookup (fetch provinces/districts/municipalities and map IDs → names)
  */
 export async function exportStudentsToCSV(students: Student[]): Promise<void> {
   const data = students.map((s) => ({
     Name: s.name,
     Age: s.age || '',
     Grade: s.grade || '',
-    Village: s.village || '',
-    Region: s.region || '',
+    Province: s.province_id || '—', // TODO: Map province_id → province name
+    District: s.district_id || '—', // TODO: Map district_id → district name
+    Municipality: s.municipality_id || '—', // TODO: Map municipality_id → municipality name
     Coordinator: s.coordinator || '',
     Status: s.status,
   }))
@@ -170,7 +172,7 @@ export async function exportStudentsToPDF(students: Student[]): Promise<void> {
     })
     doc.setFontSize(8)
     doc.text(
-      `(${student.village || 'Village'} location pin will appear here)`,
+      `(Location pin will appear here)`, // TODO: Show municipality name when available
       mapX + mapWidth / 2,
       mapY + mapHeight / 2 + 0.1,
       { align: 'center' }
@@ -182,7 +184,11 @@ export async function exportStudentsToPDF(students: Student[]): Promise<void> {
     doc.setTextColor(...colors.textMuted)
     doc.setFontSize(10)
     doc.setFont('helvetica', 'normal')
-    const caption = `Region: ${student.region || 'N/A'}  •  Village: ${student.village || 'N/A'}`
+    // TODO: Map province_id/district_id/municipality_id → names
+    const locationParts = []
+    if (student.municipality_id) locationParts.push(`Municipality ID: ${student.municipality_id}`)
+    if (student.district_id) locationParts.push(`District ID: ${student.district_id}`)
+    const caption = locationParts.length > 0 ? locationParts.join('  •  ') : 'Location: N/A'
     doc.text(caption, 4.25, yOffset, { align: 'center' })
 
     yOffset += 0.4

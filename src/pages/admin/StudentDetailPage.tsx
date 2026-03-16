@@ -20,6 +20,9 @@ import {
   getStudentSponsorships,
   findPotentialDuplicates,
   mergeStudents,
+  getProvinces,
+  getDistricts,
+  getMunicipalities,
 } from '../../lib/queries'
 import { uploadImage } from '../../lib/storage'
 import { processImage } from '../../utils/imageProcessor'
@@ -70,14 +73,36 @@ export default function StudentDetailPage() {
     [id]
   )
 
+  // Fetch ALL location data for display and form dropdowns
+  const { data: allProvinces } = useQuery(getProvinces)
+  const { data: allDistricts } = useQuery(() => getDistricts())
+  const { data: allMunicipalities } = useQuery(() => getMunicipalities())
+
+  // Filtered location data for form dropdowns (cascading)
+  const formProvinces = allProvinces ?? []
+  const formDistricts = form.province_id
+    ? (allDistricts ?? []).filter((d) => d.province_id === Number(form.province_id))
+    : []
+  const formMunicipalities = form.district_id
+    ? (allMunicipalities ?? []).filter(
+        (m) => m.district_id === Number(form.district_id)
+      )
+    : []
+
+  // Create lookup maps for displaying location names
+  const provinceMap = new Map(allProvinces?.map((p) => [p.id, p.name]) ?? [])
+  const districtMap = new Map(allDistricts?.map((d) => [d.id, d.name]) ?? [])
+  const municipalityMap = new Map(allMunicipalities?.map((m) => [m.id, m.name]) ?? [])
+
   function startEdit() {
     if (!student) return
     setForm({
       name: student.name,
       age: student.age,
       grade: student.grade,
-      village: student.village,
-      region: student.region,
+      province_id: student.province_id ?? undefined,
+      district_id: student.district_id ?? undefined,
+      municipality_id: student.municipality_id ?? undefined,
       coordinator: student.coordinator,
       status: student.status,
       notes: student.notes,
@@ -92,25 +117,28 @@ export default function StudentDetailPage() {
   async function checkForDuplicates() {
     if (!editing) return // Only check when editing
 
-    // Need all required fields
-    if (!form.name || !form.village || !form.region || !form.age) {
+    // Need name and age to check (location is optional)
+    if (!form.name || !form.age) {
       setDuplicates([])
       return
     }
 
     try {
+      const municipalityId = form.municipality_id ? Number(form.municipality_id) : null
+      const districtId = form.district_id ? Number(form.district_id) : null
+
       const candidates = await findPotentialDuplicates(
         form.name,
-        form.village,
-        form.region,
+        municipalityId,
+        districtId,
         form.age,
         id // Exclude current student
       )
 
       const ranked = rankDuplicates(candidates, {
         name: form.name,
-        village: form.village,
-        region: form.region,
+        municipality_id: municipalityId,
+        district_id: districtId,
         age: form.age,
       })
 
@@ -163,7 +191,13 @@ export default function StudentDetailPage() {
     if (!student) return
     setSaving(true)
     try {
-      let updates = { ...form }
+      let updates: Partial<Student> = {
+        ...form,
+        // Convert location IDs: number | undefined → number | null
+        province_id: form.province_id ?? null,
+        district_id: form.district_id ?? null,
+        municipality_id: form.municipality_id ?? null,
+      }
 
       // Upload photo if a new one was selected
       if (photoFile) {
@@ -374,31 +408,69 @@ export default function StudentDetailPage() {
                 onChange={(e) => setForm((f) => ({ ...f, grade: e.target.value }))}
               />
               <Input
-                label="Village"
-                required
-                value={form.village ?? ''}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, village: e.target.value }))
-                  setDuplicates([]) // Clear duplicates when village changes
-                }}
-                onBlur={checkForDuplicates}
-              />
-              <Input
-                label="Region"
-                required
-                value={form.region ?? ''}
-                onChange={(e) => {
-                  setForm((f) => ({ ...f, region: e.target.value }))
-                  setDuplicates([]) // Clear duplicates when region changes
-                }}
-                onBlur={checkForDuplicates}
-              />
-              <Input
                 label="Coordinator"
                 value={form.coordinator ?? ''}
                 onChange={(e) =>
                   setForm((f) => ({ ...f, coordinator: e.target.value }))
                 }
+              />
+              <Select
+                label="Province (Optional)"
+                placeholder="Select province"
+                options={[
+                  { value: '', label: '— None —' },
+                  ...formProvinces.map((p) => ({ value: String(p.id), label: p.name })),
+                ]}
+                value={form.province_id ? String(form.province_id) : ''}
+                onChange={(e) => {
+                  setForm((f) => ({
+                    ...f,
+                    province_id: e.target.value ? Number(e.target.value) : undefined,
+                    district_id: undefined, // Reset district when province changes
+                    municipality_id: undefined, // Reset municipality when province changes
+                  }))
+                  setDuplicates([]) // Clear duplicates when location changes
+                }}
+              />
+              <Select
+                label="District (Optional)"
+                placeholder="Select district"
+                disabled={!form.province_id}
+                options={[
+                  { value: '', label: '— None —' },
+                  ...formDistricts.map((d) => ({ value: String(d.id), label: d.name })),
+                ]}
+                value={form.district_id ? String(form.district_id) : ''}
+                onChange={(e) => {
+                  setForm((f) => ({
+                    ...f,
+                    district_id: e.target.value ? Number(e.target.value) : undefined,
+                    municipality_id: undefined, // Reset municipality when district changes
+                  }))
+                  setDuplicates([]) // Clear duplicates when location changes
+                }}
+                onBlur={checkForDuplicates}
+              />
+              <Select
+                label="Municipality (Optional)"
+                placeholder="Select municipality"
+                disabled={!form.district_id}
+                options={[
+                  { value: '', label: '— None —' },
+                  ...formMunicipalities.map((m) => ({
+                    value: String(m.id),
+                    label: m.name,
+                  })),
+                ]}
+                value={form.municipality_id ? String(form.municipality_id) : ''}
+                onChange={(e) => {
+                  setForm((f) => ({
+                    ...f,
+                    municipality_id: e.target.value ? Number(e.target.value) : undefined,
+                  }))
+                  setDuplicates([]) // Clear duplicates when location changes
+                }}
+                onBlur={checkForDuplicates}
               />
               <Select
                 label="Status"
@@ -447,8 +519,9 @@ export default function StudentDetailPage() {
                   {[
                     ['Age', student.age],
                     ['Grade', student.grade],
-                    ['Village', student.village],
-                    ['Region', student.region],
+                    ['Province', student.province_id ? provinceMap.get(student.province_id) || '—' : '—'],
+                    ['District', student.district_id ? districtMap.get(student.district_id) || '—' : '—'],
+                    ['Municipality', student.municipality_id ? municipalityMap.get(student.municipality_id) || '—' : '—'],
                     ['Coordinator', student.coordinator || '—'],
                     ['Added', formatDateShort(student.created_at)],
                   ].map(([label, value]) => (

@@ -21,6 +21,9 @@ import {
   deleteStudent,
   findPotentialDuplicates,
   mergeStudents,
+  getProvinces,
+  getDistricts,
+  getMunicipalities,
 } from '../../lib/queries'
 import type { Student, StudentStatus, DuplicateCandidate } from '../../types/database'
 import DuplicateWarningCard from '../../components/students/DuplicateWarningCard'
@@ -49,8 +52,9 @@ type StudentFormData = {
   name: string
   age: string
   grade: string
-  village: string
-  region: string
+  province_id: string
+  district_id: string
+  municipality_id: string
   coordinator: string
   status: StudentStatus
   notes: string
@@ -60,8 +64,9 @@ const emptyForm: StudentFormData = {
   name: '',
   age: '',
   grade: '',
-  village: '',
-  region: '',
+  province_id: '',
+  district_id: '',
+  municipality_id: '',
   coordinator: '',
   status: 'active',
   notes: '',
@@ -103,20 +108,49 @@ export default function StudentsPage() {
     [statusFilter]
   )
 
+  // Fetch ALL location data for table display and lookups
+  const { data: allProvinces } = useQuery(getProvinces)
+  const { data: allDistricts } = useQuery(() => getDistricts())
+  const { data: allMunicipalities } = useQuery(() => getMunicipalities())
+
+  // Filtered location data for form dropdowns (cascading)
+  const formProvinces = allProvinces ?? []
+  const formDistricts = form.province_id
+    ? (allDistricts ?? []).filter((d) => d.province_id === Number(form.province_id))
+    : []
+  const formMunicipalities = form.district_id
+    ? (allMunicipalities ?? []).filter(
+        (m) => m.district_id === Number(form.district_id)
+      )
+    : []
+
   const filtered = (students ?? []).filter((s) =>
-    search
-      ? s.name.toLowerCase().includes(search.toLowerCase()) ||
-        s.village.toLowerCase().includes(search.toLowerCase()) ||
-        s.region.toLowerCase().includes(search.toLowerCase())
-      : true
+    search ? s.name.toLowerCase().includes(search.toLowerCase()) : true
   )
+
+  // Create lookup maps for displaying location names in table
+  
+  const districtMap = new Map(allDistricts?.map((d) => [d.id, d.name]) ?? [])
+  const municipalityMap = new Map(allMunicipalities?.map((m) => [m.id, m.name]) ?? [])
 
   const columns: DataTableColumn<Student>[] = [
     { key: 'name', label: 'Name', sortable: true },
     { key: 'age', label: 'Age', sortable: true },
     { key: 'grade', label: 'Grade', sortable: true },
-    { key: 'village', label: 'Village', sortable: true },
-    { key: 'region', label: 'Region', sortable: true },
+    {
+      key: 'municipality_id',
+      label: 'Municipality',
+      sortable: true,
+      render: (_, row) =>
+        row.municipality_id ? municipalityMap.get(row.municipality_id) || '—' : '—',
+    },
+    {
+      key: 'district_id',
+      label: 'District',
+      sortable: true,
+      render: (_, row) =>
+        row.district_id ? districtMap.get(row.district_id) || '—' : '—',
+    },
     { key: 'coordinator', label: 'Coordinator', sortable: true },
     {
       key: 'status',
@@ -137,8 +171,8 @@ export default function StudentsPage() {
 
   // Check for duplicate students
   async function checkForDuplicates() {
-    // Need all required fields to check
-    if (!form.name || !form.village || !form.region || !form.age) {
+    // Need name and age to check (location is optional)
+    if (!form.name || !form.age) {
       setDuplicates([])
       return
     }
@@ -150,18 +184,23 @@ export default function StudentsPage() {
     }
 
     try {
+      const municipalityId = form.municipality_id
+        ? Number(form.municipality_id)
+        : null
+      const districtId = form.district_id ? Number(form.district_id) : null
+
       const candidates = await findPotentialDuplicates(
         form.name,
-        form.village,
-        form.region,
+        municipalityId,
+        districtId,
         age,
         editingStudent?.id // Exclude self when editing
       )
 
       const ranked = rankDuplicates(candidates, {
         name: form.name,
-        village: form.village,
-        region: form.region,
+        municipality_id: municipalityId,
+        district_id: districtId,
         age,
       })
 
@@ -220,8 +259,9 @@ export default function StudentsPage() {
         name: form.name,
         age: parseInt(form.age, 10),
         grade: form.grade,
-        village: form.village,
-        region: form.region,
+        province_id: form.province_id ? Number(form.province_id) : null,
+        district_id: form.district_id ? Number(form.district_id) : null,
+        municipality_id: form.municipality_id ? Number(form.municipality_id) : null,
         coordinator: form.coordinator,
         status: form.status,
         notes: form.notes || null,
@@ -379,7 +419,7 @@ export default function StudentsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
           <input
             type="text"
-            placeholder="Search by name, village, or region..."
+            placeholder="Search by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full h-[42px] pl-10 pr-3 py-2 rounded-lg border border-border bg-white text-text-high placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -464,29 +504,58 @@ export default function StudentsPage() {
               onChange={(e) => setField('grade', e.target.value)}
             />
             <Input
-              label="Village"
-              required
-              value={form.village}
-              onChange={(e) => {
-                setField('village', e.target.value)
-                setDuplicates([]) // Clear duplicates when village changes
-              }}
-              onBlur={checkForDuplicates}
-            />
-            <Input
-              label="Region"
-              required
-              value={form.region}
-              onChange={(e) => {
-                setField('region', e.target.value)
-                setDuplicates([]) // Clear duplicates when region changes
-              }}
-              onBlur={checkForDuplicates}
-            />
-            <Input
               label="Coordinator"
               value={form.coordinator}
               onChange={(e) => setField('coordinator', e.target.value)}
+            />
+            <Select
+              label="Province (Optional)"
+              placeholder="Select province"
+              options={[
+                { value: '', label: '— None —' },
+                ...formProvinces.map((p) => ({ value: String(p.id), label: p.name })),
+              ]}
+              value={form.province_id}
+              onChange={(e) => {
+                setField('province_id', e.target.value)
+                setField('district_id', '') // Reset district when province changes
+                setField('municipality_id', '') // Reset municipality when province changes
+                setDuplicates([]) // Clear duplicates when location changes
+              }}
+            />
+            <Select
+              label="District (Optional)"
+              placeholder="Select district"
+              disabled={!form.province_id}
+              options={[
+                { value: '', label: '— None —' },
+                ...formDistricts.map((d) => ({ value: String(d.id), label: d.name })),
+              ]}
+              value={form.district_id}
+              onChange={(e) => {
+                setField('district_id', e.target.value)
+                setField('municipality_id', '') // Reset municipality when district changes
+                setDuplicates([]) // Clear duplicates when location changes
+              }}
+              onBlur={checkForDuplicates}
+            />
+            <Select
+              label="Municipality (Optional)"
+              placeholder="Select municipality"
+              disabled={!form.district_id}
+              options={[
+                { value: '', label: '— None —' },
+                ...formMunicipalities.map((m) => ({
+                  value: String(m.id),
+                  label: m.name,
+                })),
+              ]}
+              value={form.municipality_id}
+              onChange={(e) => {
+                setField('municipality_id', e.target.value)
+                setDuplicates([]) // Clear duplicates when location changes
+              }}
+              onBlur={checkForDuplicates}
             />
             <Select
               label="Status"

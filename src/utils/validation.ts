@@ -32,13 +32,8 @@ export function validateStudentRow(
     errors.push('Grade is required')
   }
 
-  if (!row.village?.trim()) {
-    errors.push('Village is required')
-  }
-
-  if (!row.region?.trim()) {
-    errors.push('Region is required')
-  }
+  // Location fields (province, district, municipality) are now optional
+  // No validation needed
 
   // Optional fields
   if (row.status && !['active', 'inactive', 'graduated', 'merged'].includes(row.status)) {

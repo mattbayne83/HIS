@@ -10,13 +10,44 @@ export interface Profile {
   created_at: string
 }
 
+// Nepal Location Hierarchy
+export interface Province {
+  id: number
+  name: string
+  area_sq_km: number | null
+  website: string | null
+  created_at: string
+}
+
+export interface District {
+  id: number
+  province_id: number
+  name: string
+  area_sq_km: number | null
+  headquarter: string | null
+  website: string | null
+  created_at: string
+}
+
+export interface Municipality {
+  id: number
+  district_id: number
+  category_id: number
+  name: string
+  area_sq_km: number | null
+  wards: number | null
+  website: string | null
+  created_at: string
+}
+
 export interface Student {
   id: string
   name: string
   age: number
   grade: string
-  village: string
-  region: string
+  province_id: number | null
+  district_id: number | null
+  municipality_id: number | null
   coordinator: string
   photo_url: string | null
   status: StudentStatus

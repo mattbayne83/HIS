@@ -58,59 +58,63 @@ function normalizeString(str: string): string {
  */
 export function calculateMatchScore(
   candidate: Student,
-  input: { name: string; village: string; region: string; age: number }
+  input: {
+    name: string
+    municipality_id: number | null
+    district_id: number | null
+    age: number
+  }
 ): number {
   const normCandidateName = normalizeString(candidate.name)
   const normInputName = normalizeString(input.name)
 
   // Check exact matches
   const exactNameMatch = normCandidateName === normInputName
-  const exactVillageMatch =
-    normalizeString(candidate.village) === normalizeString(input.village)
-  const exactRegionMatch =
-    normalizeString(candidate.region) === normalizeString(input.region)
+  const exactMunicipalityMatch =
+    input.municipality_id !== null &&
+    candidate.municipality_id === input.municipality_id
+  const exactDistrictMatch =
+    input.district_id !== null && candidate.district_id === input.district_id
   const exactAgeMatch = candidate.age === input.age
 
   // Calculate Levenshtein distance for name
   const nameDistance = levenshteinDistance(normCandidateName, normInputName)
   const ageDifference = Math.abs(candidate.age - input.age)
 
-  // Scoring algorithm
-  if (exactNameMatch && exactVillageMatch && exactAgeMatch) {
+  // Scoring algorithm (updated for location hierarchy)
+  if (exactNameMatch && exactMunicipalityMatch && exactAgeMatch) {
     // Exact match on all core fields
     return 95
   }
 
-  if (nameDistance <= 2 && exactVillageMatch && ageDifference <= 1) {
-    // Very close name + same village + age within 1 year
+  if (nameDistance <= 2 && exactMunicipalityMatch && ageDifference <= 1) {
+    // Very close name + same municipality + age within 1 year
     return 85
   }
 
-  if (nameDistance <= 3 && exactVillageMatch && ageDifference <= 1) {
-    // Close name + same village + age within 1 year
+  if (nameDistance <= 3 && exactMunicipalityMatch && ageDifference <= 1) {
+    // Close name + same municipality + age within 1 year
     return 75
   }
 
-  if (exactNameMatch && exactVillageMatch && ageDifference <= 2) {
-    // Exact name + village but different age
+  if (exactNameMatch && exactMunicipalityMatch && ageDifference <= 2) {
+    // Exact name + municipality but different age
     return 70
   }
 
-  if (nameDistance <= 3 && exactVillageMatch && ageDifference <= 2) {
-    // Similar name + same village + age within 2 years
+  if (nameDistance <= 3 && exactMunicipalityMatch && ageDifference <= 2) {
+    // Similar name + same municipality + age within 2 years
     return 65
   }
 
-  if (exactNameMatch && exactRegionMatch && ageDifference <= 1) {
-    // Exact name + same region (different village) + similar age
+  if (exactNameMatch && exactDistrictMatch && ageDifference <= 1) {
+    // Exact name + same district (different/no municipality) + similar age
     return 60
   }
 
-  // Below threshold
-  return Math.max(
-    0,
-    50 - nameDistance * 10 - ageDifference * 5 - (exactVillageMatch ? 0 : 20)
-  )
+  // Below threshold - consider location match even if no exact municipality
+  const locationBonus = exactMunicipalityMatch ? 20 : exactDistrictMatch ? 10 : 0
+  return Math.max(0, 50 - nameDistance * 10 - ageDifference * 5 + locationBonus)
 }
 
 /**
@@ -121,7 +125,12 @@ export function calculateMatchScore(
  */
 export function rankDuplicates(
   candidates: Student[],
-  input: { name: string; village: string; region: string; age: number }
+  input: {
+    name: string
+    municipality_id: number | null
+    district_id: number | null
+    age: number
+  }
 ): DuplicateCandidate[] {
   const THRESHOLD = 60 // Minimum match score percentage
 
@@ -143,9 +152,15 @@ export function rankDuplicates(
       }
 
       if (
-        normalizeString(candidate.village) === normalizeString(input.village)
+        input.municipality_id !== null &&
+        candidate.municipality_id === input.municipality_id
       ) {
-        reasons.push('Same village')
+        reasons.push('Same municipality')
+      } else if (
+        input.district_id !== null &&
+        candidate.district_id === input.district_id
+      ) {
+        reasons.push('Same district')
       }
 
       const ageDiff = Math.abs(candidate.age - input.age)
